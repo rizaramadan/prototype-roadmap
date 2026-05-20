@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ases.id — Talentlytica Architecture</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <style>:root { --accent: var(--ases); --hero-bg: var(--ases-dim); }</style>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="left-nav" id="left-nav"></nav>
+
+  <div class="app-right">
+    <div class="topbar">
+      <a href="../../index.html" class="breadcrumb-link">Architecture</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">ases.id</span>
+      <div class="version-switcher" data-domain="ases" data-current="v1"></div>
+    </div>
+
+    <div class="domain-hero">
+      <p class="eyebrow">Assessment Domain</p>
+      <h1>ases.id</h1>
+      <p class="tagline">Core Behaviour signal ingestion, measurement, and storage — the VictoriaMetrics of Talentlytica's ecosystem.</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><span class="label">URL</span><strong>ases.id</strong></span>
+        <span class="hero-chip"><span class="label">Model</span><strong>Shared platform service</strong></span>
+        <span class="hero-chip"><span class="label">Consumers</span><strong>recru.id · peningkatan.id · bakat.id · external ATS</strong></span>
+      </div>
+    </div>
+
+    <main class="main-content">
+
+      <section id="overview">
+        <h2><span class="section-icon">📊</span> Overview</h2>
+        <p class="section-desc">ases.id is a shared platform service — the measurement engine for the entire ecosystem. Every assessment, from recruitment screening to employee development, flows through ases.id.</p>
+        <div class="callout accent">
+          <span class="callout-icon">⚡</span>
+          <p><strong>VictoriaMetrics analogy:</strong> ases.id ingests raw signals (assessment responses) and stores them as Core Behaviour measurements. It doesn't interpret or act on the data — that's <a href="../peningkatan.html" style="color:var(--peningkatan)">peningkatan.id</a>'s job. ases.id ensures measurements are accurate, durable, and queryable.</p>
+        </div>
+        <div class="callout">
+          <span class="callout-icon">🔗</span>
+          <p><strong>Cross-domain reach:</strong> ases.id is the only domain that directly touches all others. recru.id sends candidates here for hiring assessments. peningkatan.id sends employees here for development assessments. bakat.id retains the results. External ATS systems bridge in via email invitation.</p>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2><span class="section-icon">⚙️</span> Services</h2>
+        <div class="card-grid">
+          <div class="card">
+            <p class="card-title">IngestionService</p>
+            <p class="card-desc">Receives, validates, and stores assessment responses. Maps raw responses to Core Behaviour dimensions using the posisi.recru.id ontology.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">InvitationService</p>
+            <p class="card-desc">Manages assessment invitations sent via email. Handles both direct invites (from peningkatan.id) and bridged invites (from external ATS systems).</p>
+            <div class="card-meta"><span class="badge badge-command">accepts commands</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">ScoringService</p>
+            <p class="card-desc">Computes Core Behaviour scores from raw responses. Scores are normalized against position requirements sourced from posisi.recru.id.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">IntakeService</p>
+            <p class="card-desc">Handles person onboarding within ases.id. Offers "use previous data or re-intake" for returning persons. Links to bakat.id profile via hashed national ID.</p>
+            <div class="card-meta"><span class="badge badge-consumes">consumes events</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="publishes">
+        <h2><span class="section-icon">📤</span> Published Events</h2>
+        <p class="section-desc">Events emitted by ases.id — the primary signal source for the entire ecosystem.</p>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">AssessmentAssigned</span>
+            <span class="event-card-desc">An assessment has been assigned to a person.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-recru">→ recru.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-external">→ external ATS (webhook)</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>assessmentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>personId</td><td class="type">uuid?</td><td>bakat.id person ID if linked, else null</td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string?</td><td>If available</td></tr>
+                <tr><td>assignedBy</td><td class="type">string</td><td>Requesting platform identifier</td></tr>
+                <tr><td>positionId</td><td class="type">uuid?</td><td>posisi.recru.id position reference for recruitment context</td></tr>
+                <tr><td>assignedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">AssessmentStarted</span>
+            <span class="event-card-desc">The person has begun the assessment session.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-recru">→ recru.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>assessmentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>personId</td><td class="type">uuid?</td><td></td></tr>
+                <tr><td>startedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">AssessmentCompleted</span>
+            <span class="event-card-desc">The person has finished the assessment. Raw responses are stored.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-bakat">→ bakat.id</span>
+              <span class="badge badge-domain-recru">→ recru.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-external">→ external ATS (webhook)</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>assessmentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>personId</td><td class="type">uuid?</td><td></td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string?</td><td></td></tr>
+                <tr><td>completedAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>duration</td><td class="type">seconds</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">PersonCoreBehaviourProfileUpdated</span>
+            <span class="event-card-desc">Core Behaviour scores computed. The primary signal event — most important in the ecosystem.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-bakat">→ bakat.id</span>
+              <span class="badge badge-domain-recru">→ recru.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>assessmentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>personId</td><td class="type">uuid?</td><td></td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string</td><td>Cross-domain linking key</td></tr>
+                <tr><td>coreBehaviourScores</td><td class="type">map&lt;string, float&gt;</td><td>behaviourId → normalized score (0–1)</td></tr>
+                <tr><td>positionId</td><td class="type">uuid?</td><td>If assessment was position-scoped</td></tr>
+                <tr><td>fitScore</td><td class="type">float?</td><td>Person–position fit (0–1), if positionId set</td></tr>
+                <tr><td>scoredAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>tenantId</td><td class="type">string?</td><td>Originating client tenant</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="consumes">
+        <h2><span class="section-icon">📥</span> Consumed Events</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Event</th><th>Source</th><th>Action in ases.id</th></tr></thead>
+            <tbody>
+              <tr><td><strong>ConsentGranted</strong></td><td><span class="badge badge-domain-bakat">bakat.id</span></td><td>Unlocks the person's historical assessment data for the authorized platform to query.</td></tr>
+              <tr><td><strong>PositionRequirementsUpdated</strong></td><td><span class="badge badge-domain-posisi">posisi.recru.id</span></td><td>Updates the scoring framework — new position requirements used for future fit score calculations.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="commands">
+        <h2><span class="section-icon">⚡</span> Commands</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Command</th><th>Issued by</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><strong>AssignAssessment</strong></td><td><span class="badge badge-domain-recru">recru.id</span> <span class="badge badge-domain-peningkatan">peningkatan.id</span> <span class="badge badge-external">external ATS</span></td><td>Request to create and assign an assessment to a person. Includes positionId (optional), tenantId, invitee email/identifier.</td></tr>
+              <tr><td><strong>SendInvitation</strong></td><td>InvitationService (internal)</td><td>Sends the assessment invitation email.</td></tr>
+              <tr><td><strong>SubmitResponses</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Person submits completed assessment responses.</td></tr>
+              <tr><td><strong>ReassessWithPreviousData</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Person chooses to use previous intake data for a new assessment context.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="queries">
+        <h2><span class="section-icon">🔍</span> Queries</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Query</th><th>Authorized caller</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GetAssessmentResult</strong></td><td>Platform with active consent or same-tenant</td><td>Full assessment result including Core Behaviour scores and fit score.</td></tr>
+              <tr><td><strong>GetPersonCoreBehaviourHistory</strong></td><td>Platform with active ConsentGranted or bakat.id</td><td>All historical Core Behaviour measurements for a person, ordered by date.</td></tr>
+              <tr><td><strong>GetAssessmentStatus</strong></td><td>Any authorized platform</td><td>Current status: pending | started | completed | expired.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="intake-flow">
+        <h2><span class="section-icon">🔀</span> Intake Flow</h2>
+        <p class="section-desc">When a person arrives at ases.id, they go through intake that links them to the ecosystem.</p>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-content"><div class="flow-step-title">Person arrives via invitation link</div><div class="flow-step-desc">Invitation was sent by recru.id (hiring), peningkatan.id (development), or external ATS.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-content"><div class="flow-step-title">Identity resolution</div><div class="flow-step-desc">ases.id checks if this person has an existing bakat.id profile via hashed national ID. If yes: "use previous data or re-intake". If no: full intake.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-content"><div class="flow-step-title">Consent check</div><div class="flow-step-desc">If previous data exists, person decides whether to grant consent to link this assessment to their bakat.id portable profile.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-content"><div class="flow-step-title">Assessment begins</div><div class="flow-step-desc">AssessmentStarted emitted. On completion: AssessmentCompleted and PersonCoreBehaviourProfileUpdated emitted.</div></div></div>
+        </div>
+      </section>
+
+      <section id="data-model">
+        <h2><span class="section-icon">🗂️</span> Data Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aggregate</th><th>Key Fields</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Assessment</strong></td><td><code>assessmentId</code>, <code>personId?</code>, <code>hashedNationalId?</code>, <code>positionId?</code>, <code>tenantId?</code>, <code>status</code></td><td>Can exist without a linked personId (anonymous intake).</td></tr>
+              <tr><td><strong>AssessmentResponse</strong></td><td><code>assessmentId</code>, <code>questionId</code>, <code>response</code>, <code>submittedAt</code></td><td>Immutable after submission.</td></tr>
+              <tr><td><strong>CoreBehaviourScore</strong></td><td><code>assessmentId</code>, <code>behaviourId</code>, <code>rawScore</code>, <code>normalizedScore</code>, <code>scoredAt</code></td><td>behaviourId references posisi.recru.id ontology.</td></tr>
+              <tr><td><strong>PersonProfile</strong> <span style="font-size:11px;color:var(--text-dim)">(projection)</span></td><td><code>hashedNationalId</code>, <code>assessmentIds[]</code>, <code>aggregateScores</code>, <code>lastScoredAt</code></td><td>Read model for GetPersonCoreBehaviourHistory.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- app-right -->
+</div><!-- app-layout -->
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

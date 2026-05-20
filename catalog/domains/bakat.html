@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bakat.id — Talentlytica Architecture</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>:root { --accent: var(--bakat); --hero-bg: var(--bakat-dim); }</style>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="left-nav" id="left-nav"></nav>
+
+  <div class="app-right">
+    <div class="topbar">
+      <a href="../index.html" class="breadcrumb-link">Architecture</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">bakat.id</span>
+    </div>
+
+    <div class="domain-hero">
+      <p class="eyebrow">Person Domain</p>
+      <h1>bakat.id</h1>
+      <p class="tagline">The person's permanent career identity — portable across employers, owned by the individual.</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><span class="label">URL</span><strong>bakat.id</strong></span>
+        <span class="hero-chip"><span class="label">Model</span><strong>Single-tenant (person-centric)</strong></span>
+        <span class="hero-chip"><span class="label">Identity key</span><strong>Hashed National ID</strong></span>
+        <span class="hero-chip"><span class="label">Sub-apps</span><strong>siswa · beasiswa · award</strong></span>
+      </div>
+    </div>
+
+    <main class="main-content">
+
+      <section id="overview">
+        <h2><span class="section-icon">🪪</span> Overview</h2>
+        <p class="section-desc">bakat.id holds the individual's profile, portable assessment history, and serves as the consent control plane for cross-platform data sharing.</p>
+        <div class="callout accent">
+          <span class="callout-icon">💡</span>
+          <p><strong>Portability principle:</strong> Data earned at one employer (e.g., Learning Agility score at Client A) is retained in bakat.id and travels with the person. When they join Client B, they authorize that client to read it — data is never trapped inside a client's tenant.</p>
+        </div>
+        <div class="callout">
+          <span class="callout-icon">🔐</span>
+          <p><strong>Consent model:</strong> bakat.id is where people manage consent. Each platform that wants to read a person's retained data must be explicitly authorized by the person. Consent is scoped (e.g., "allow Client B's peningkatan.id to read my Core Behaviour history") and revocable at any time.</p>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2><span class="section-icon">⚙️</span> Services</h2>
+        <p class="section-desc">Distinct capabilities within bakat.id, all sharing the same person profile as foundation.</p>
+        <div class="card-grid">
+          <div class="card">
+            <p class="card-title">ProfileService</p>
+            <p class="card-desc">Core person profile management. Stores identity, Core Behaviour history, and portable assessment results. Entry point: <code>www.bakat.id</code>.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">ConsentService</p>
+            <p class="card-desc">Manages per-platform consent grants and revocations. Emits consent events consumed by data-provider platforms.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">PortabilityService</p>
+            <p class="card-desc">Retains assessment results from ases.id into the person's portable profile. Responds to ConsentGranted by exposing retained data to authorized platforms.</p>
+            <div class="card-meta"><span class="badge badge-consumes">consumes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">SiswaService</p>
+            <p class="card-desc">Student-specific features on <code>siswa.bakat.id</code>. Tracks academic profile, learning progress, and connects to partner platforms (edulab, AI Visor).</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">BeasiswaService</p>
+            <p class="card-desc">Scholarship management on <code>beasiswa.bakat.id</code>. Handles applications, eligibility, and award disbursement with institutional partners.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">AwardService</p>
+            <p class="card-desc">Recognition and achievement tracking on <code>award.bakat.id</code>. Issues verifiable awards and interfaces with institutional partners (e.g., intikom).</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="publishes">
+        <h2><span class="section-icon">📤</span> Published Events</h2>
+        <p class="section-desc">Events emitted by bakat.id that other domains subscribe to.</p>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">PersonRegistered</span>
+            <span class="event-card-desc">A new person has created their bakat.id profile.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-ases">→ ases.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-domain-recru">→ recru.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>personId</td><td class="type">uuid</td><td>Internal bakat.id identifier</td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string</td><td>Cross-domain linking key</td></tr>
+                <tr><td>registeredAt</td><td class="type">datetime</td><td>ISO 8601</td></tr>
+                <tr><td>source</td><td class="type">enum</td><td>www | siswa | beasiswa | recru_intake | ases_intake</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">ProfileUpdated</span>
+            <span class="event-card-desc">The person has updated their profile data.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-domain-recru">→ recru.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>personId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string</td><td></td></tr>
+                <tr><td>changedFields</td><td class="type">string[]</td><td>Field names that changed</td></tr>
+                <tr><td>updatedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">ConsentGranted</span>
+            <span class="event-card-desc">Person has authorized a specific platform to read their retained data.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-ases">→ ases.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-domain-recru">→ recru.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>personId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string</td><td></td></tr>
+                <tr><td>grantedTo</td><td class="type">string</td><td>Platform identifier (e.g., clientB.peningkatan.id)</td></tr>
+                <tr><td>scope</td><td class="type">string[]</td><td>e.g., ["core_behaviour_history", "assessment_results"]</td></tr>
+                <tr><td>grantedAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>expiresAt</td><td class="type">datetime?</td><td>Optional expiry</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">ConsentRevoked</span>
+            <span class="event-card-desc">Person has revoked a previously granted consent.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-domain-recru">→ recru.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>personId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>revokedFrom</td><td class="type">string</td><td>Platform identifier</td></tr>
+                <tr><td>revokedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">AssessmentResultRetained</span>
+            <span class="event-card-desc">An assessment result from ases.id has been retained into the person's portable profile.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8"><span class="badge badge-external">internal only</span></div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>personId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>assessmentId</td><td class="type">uuid</td><td>Reference to ases.id assessment</td></tr>
+                <tr><td>retainedData</td><td class="type">object</td><td>Portable subset (Core Behaviour scores)</td></tr>
+                <tr><td>sourceTenant</td><td class="type">string</td><td>Client tenant where assessment was done</td></tr>
+                <tr><td>retainedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">ScholarshipAwarded</span>
+            <span class="event-card-desc">A scholarship has been granted to a student.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8"><span class="badge badge-external">→ intikom (partner)</span></div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>personId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>scholarshipId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>awardedBy</td><td class="type">string</td><td>Institution identifier</td></tr>
+                <tr><td>awardedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="consumes">
+        <h2><span class="section-icon">📥</span> Consumed Events</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Event</th><th>Source</th><th>Action in bakat.id</th></tr></thead>
+            <tbody>
+              <tr><td><strong>AssessmentCompleted</strong></td><td><span class="badge badge-domain-ases">ases.id</span></td><td>Triggers PortabilityService to retain Core Behaviour scores in the person's portable profile.</td></tr>
+              <tr><td><strong>PersonCoreBehaviourProfileUpdated</strong></td><td><span class="badge badge-domain-ases">ases.id</span></td><td>Updates the person's aggregated Core Behaviour snapshot in their bakat.id profile.</td></tr>
+              <tr><td><strong>CandidateHired</strong></td><td><span class="badge badge-domain-recru">recru.id</span></td><td>Updates the person's employment status in their profile.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="commands">
+        <h2><span class="section-icon">⚡</span> Commands</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Command</th><th>Issued by</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><strong>RegisterPerson</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Create a new bakat.id profile. Requires hashed national ID for cross-domain linking.</td></tr>
+              <tr><td><strong>UpdateProfile</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Update personal information on the profile.</td></tr>
+              <tr><td><strong>GrantConsent</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Authorize a named platform to read a scoped subset of the person's retained data.</td></tr>
+              <tr><td><strong>RevokeConsent</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Revoke a previously granted consent from a named platform.</td></tr>
+              <tr><td><strong>InitiateIntake</strong></td><td><span class="badge badge-domain-ases">ases.id</span> <span class="badge badge-domain-recru">recru.id</span></td><td>Called when an external platform needs to link or create a bakat.id profile during their onboarding flow.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="queries">
+        <h2><span class="section-icon">🔍</span> Queries</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Query</th><th>Authorized caller</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GetPersonProfile</strong></td><td><span class="badge badge-external">person (self)</span></td><td>Full profile including all retained data scopes.</td></tr>
+              <tr><td><strong>GetPortableProfile</strong></td><td>Platform with active ConsentGranted</td><td>The consented subset of the person's retained data.</td></tr>
+              <tr><td><strong>GetConsentStatus</strong></td><td><span class="badge badge-external">any platform</span></td><td>Whether a given person has granted consent to the requesting platform, and what scopes.</td></tr>
+              <tr><td><strong>ResolveHashedNationalId</strong></td><td>Internal only</td><td>Check if a hashed national ID is already linked to a bakat.id profile. Used during intake deduplication.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="data-model">
+        <h2><span class="section-icon">🗂️</span> Data Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aggregate</th><th>Key Fields</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Person</strong></td><td><code>personId</code>, <code>hashedNationalId</code>, <code>name</code>, <code>contact</code>, <code>registeredAt</code></td><td>hashedNationalId is immutable after registration.</td></tr>
+              <tr><td><strong>PortableProfile</strong></td><td><code>personId</code>, <code>assessmentResults[]</code>, <code>coreBehaviourSnapshot</code>, <code>employmentHistory[]</code></td><td>Accumulates retained data. Owned by the person, not any client tenant.</td></tr>
+              <tr><td><strong>ConsentRecord</strong></td><td><code>personId</code>, <code>grantedTo</code>, <code>scope[]</code>, <code>grantedAt</code>, <code>expiresAt?</code>, <code>status</code></td><td>One record per (person, platform) pair. Status: active | revoked | expired.</td></tr>
+              <tr><td><strong>StudentRecord</strong></td><td><code>personId</code>, <code>institution</code>, <code>level</code>, <code>learningProgress</code></td><td>Owned by SiswaService.</td></tr>
+              <tr><td><strong>ScholarshipApplication</strong></td><td><code>personId</code>, <code>scholarshipId</code>, <code>status</code>, <code>awardedAt?</code></td><td>Owned by BeasiswaService.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- app-right -->
+</div><!-- app-layout -->
+<script src="../assets/nav.js"></script>
+</body>
+</html>

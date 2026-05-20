@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>posisi.recru.id — Talentlytica Architecture</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>:root { --accent: var(--posisi); --hero-bg: var(--posisi-dim); }</style>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="left-nav" id="left-nav"></nav>
+
+  <div class="app-right">
+    <div class="topbar">
+      <a href="../index.html" class="breadcrumb-link">Architecture</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="recru.html" class="breadcrumb-link">recru.id</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">posisi.recru.id</span>
+    </div>
+
+    <div class="domain-hero">
+      <p class="eyebrow">Position Service</p>
+      <h1>posisi.recru.id</h1>
+      <p class="tagline">The canonical taxonomy of positions, roles, and the Core Behaviours that define them. A sub-domain of recru.id.</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><span class="label">URL</span><strong>posisi.recru.id</strong></span>
+        <span class="hero-chip"><span class="label">Owner</span><strong>recru.id (sub-domain)</strong></span>
+        <span class="hero-chip"><span class="label">Analogous to</span><strong>O*NET · SkillsFuture — Core Behaviour-native</strong></span>
+      </div>
+    </div>
+
+    <main class="main-content">
+
+      <section id="overview">
+        <h2><span class="section-icon">🏷️</span> Overview</h2>
+        <p class="section-desc">posisi.recru.id answers: <em>"What does this position actually require?"</em> It breaks every role into its constituent Core Behaviours, enabling precise matching, career path design, and targeted assessment.</p>
+        <div class="callout accent">
+          <span class="callout-icon">🔭</span>
+          <p><strong>The right side of Talentlytica's mission:</strong> If <a href="bakat.html" style="color:var(--bakat)">bakat.id</a> describes who a person <em>is</em> in Core Behaviour terms, posisi.recru.id describes what a position <em>demands</em>. <a href="ases.html" style="color:var(--ases)">ases.id</a> measures the gap between the two.</p>
+        </div>
+        <div class="callout">
+          <span class="callout-icon">🏢</span>
+          <p><strong>Sub-domain of recru.id:</strong> posisi.recru.id is owned by the recruitment bounded context. recru.id uses it internally for job requirements; ases.id and peningkatan.id consume its ontology cross-domain for scoring and career pathing.</p>
+        </div>
+        <div class="callout">
+          <span class="callout-icon">🌐</span>
+          <p><strong>External reference alignment:</strong> posisi.recru.id is Talentlytica's native equivalent of O*NET and SkillsFuture. Where those systems use skills and competency frameworks, posisi.recru.id uses the Core Behaviour ontology — more atomic, more matchable.</p>
+        </div>
+      </section>
+
+      <section id="core-behaviour">
+        <h2><span class="section-icon">⚛️</span> Core Behaviour Ontology</h2>
+        <p class="section-desc">The shared kernel the entire ecosystem speaks. posisi.recru.id is the authoritative owner of this ontology.</p>
+        <div class="callout" style="border-color:var(--peningkatan)">
+          <span class="callout-icon">🧬</span>
+          <p>
+            <strong>Atom → Molecule → Compound</strong><br><br>
+            A <strong style="color:var(--peningkatan)">Core Behaviour</strong> is the smallest observable unit — e.g., <em>"Seeks feedback proactively"</em>.<br><br>
+            Core Behaviours cluster into <strong>Competencies</strong> — e.g., <em>"Learning Agility"</em> is a cluster of adaptation-related Core Behaviours.<br><br>
+            Competencies compose into <strong>Position profiles</strong> — e.g., <em>"Senior Product Manager"</em> requires specific competency weights, derived from weighted Core Behaviour clusters.<br><br>
+            This enables <strong>mix-and-match career pathing</strong>: two positions sharing 70% of Core Behaviours can be bridged by a targeted IDP.
+          </p>
+        </div>
+        <div class="table-wrap mt-16">
+          <table class="data-table">
+            <thead><tr><th>Level</th><th>Example</th><th>Owned by</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Core Behaviour</strong> <span class="badge badge-core" style="margin-left:6px">atom</span></td><td>"Seeks feedback proactively"</td><td>posisi.recru.id (authoritative)</td></tr>
+              <tr><td><strong>Competency</strong> <span class="badge badge-external" style="margin-left:6px">molecule</span></td><td>"Learning Agility"</td><td>posisi.recru.id (via Core Behaviour clustering)</td></tr>
+              <tr><td><strong>Position Profile</strong> <span class="badge badge-external" style="margin-left:6px">compound</span></td><td>"Senior Product Manager"</td><td>posisi.recru.id (via Competency weighting)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2><span class="section-icon">⚙️</span> Services</h2>
+        <div class="card-grid">
+          <div class="card">
+            <p class="card-title">CoreBehaviourService</p>
+            <p class="card-desc">Authoritative CRUD for Core Behaviour definitions. Changes here ripple to ases.id and peningkatan.id via events.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">PositionTaxonomyService</p>
+            <p class="card-desc">Manages position definitions and maps them to weighted Core Behaviour clusters. Used internally by recru.id for job requirements and cross-domain by peningkatan.id for career paths.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">CompetencyService</p>
+            <p class="card-desc">Manages competency definitions as named clusters of Core Behaviours. Bridges the ontology for human-readable use — HR sees competencies, the system works in Core Behaviours.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">ExternalMappingService</p>
+            <p class="card-desc">Maintains mappings between posisi positions and external frameworks (O*NET SOC codes, SkillsFuture). Read-only reference — not authoritative.</p>
+            <div class="card-meta"><span class="badge badge-external">ACL · read-only</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="publishes">
+        <h2><span class="section-icon">📤</span> Published Events</h2>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">CoreBehaviourDefined</span>
+            <span class="event-card-desc">A new Core Behaviour has been added to the ontology.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-ases">→ ases.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>behaviourId</td><td class="type">uuid</td><td>Stable — never changes once defined</td></tr>
+                <tr><td>code</td><td class="type">string</td><td>e.g., CB-042</td></tr>
+                <tr><td>name</td><td class="type">string</td><td>e.g., "Seeks feedback proactively"</td></tr>
+                <tr><td>description</td><td class="type">string</td><td></td></tr>
+                <tr><td>category</td><td class="type">string</td><td>Broad grouping</td></tr>
+                <tr><td>definedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">PositionCreated</span>
+            <span class="event-card-desc">A new position has been defined with its Core Behaviour requirements.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-recru">→ recru.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+              <span class="badge badge-domain-ases">→ ases.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>positionId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>title</td><td class="type">string</td><td>e.g., "Senior Product Manager"</td></tr>
+                <tr><td>level</td><td class="type">string</td><td>junior | mid | senior | lead | executive</td></tr>
+                <tr><td>coreBehaviourWeights</td><td class="type">map&lt;behaviourId, float&gt;</td><td>Weight 0–1 per required Core Behaviour</td></tr>
+                <tr><td>externalMappings</td><td class="type">object?</td><td>{ onet: "...", skillsfuture: "..." }</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">PositionRequirementsUpdated</span>
+            <span class="event-card-desc">Core Behaviour weights for an existing position have changed. Triggers fit score recalculation downstream.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-ases">→ ases.id</span>
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>positionId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>previousWeights</td><td class="type">map&lt;behaviourId, float&gt;</td><td>For audit trail</td></tr>
+                <tr><td>newWeights</td><td class="type">map&lt;behaviourId, float&gt;</td><td></td></tr>
+                <tr><td>reason</td><td class="type">string?</td><td></td></tr>
+                <tr><td>updatedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="consumes">
+        <h2><span class="section-icon">📥</span> Consumed Events</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Event</th><th>Source</th><th>Action in posisi.recru.id</th></tr></thead>
+            <tbody>
+              <tr><td><strong>(External import trigger)</strong></td><td><span class="badge badge-external">O*NET · SkillsFuture</span></td><td>Scheduled import of external taxonomy updates. Mapped to posisi ontology by ExternalMappingService. Never overwrites the Core Behaviour ontology — reference only.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="commands">
+        <h2><span class="section-icon">⚡</span> Commands</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Command</th><th>Issued by</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><strong>DefineCoreBehaviour</strong></td><td><span class="badge badge-external">Talentlytica content team</span></td><td>Add a new atomic Core Behaviour to the ontology.</td></tr>
+              <tr><td><strong>CreatePosition</strong></td><td><span class="badge badge-external">Talentlytica content team</span></td><td>Define a new position with its Core Behaviour weight profile.</td></tr>
+              <tr><td><strong>UpdatePositionRequirements</strong></td><td><span class="badge badge-external">Talentlytica content team</span></td><td>Revise Core Behaviour weights for an existing position.</td></tr>
+              <tr><td><strong>MapExternalTaxonomy</strong></td><td><span class="badge badge-external">Talentlytica (scheduled)</span></td><td>Import and map an external taxonomy entry to an existing posisi position.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="queries">
+        <h2><span class="section-icon">🔍</span> Queries</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Query</th><th>Authorized caller</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GetPositionRequirements</strong></td><td>Any platform</td><td>Full Core Behaviour weight profile for a given positionId.</td></tr>
+              <tr><td><strong>SearchPositions</strong></td><td>Any platform</td><td>Positions matching a title or Core Behaviour cluster filter.</td></tr>
+              <tr><td><strong>GetCoreBehavioursByCompetency</strong></td><td>Any platform</td><td>All Core Behaviours that compose a given competency.</td></tr>
+              <tr><td><strong>GetCareerPathBridge</strong></td><td><span class="badge badge-domain-peningkatan">peningkatan.id</span></td><td>Core Behaviour delta between two positions — what must be developed to move from Position A to Position B. Used for IDP generation.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="data-model">
+        <h2><span class="section-icon">🗂️</span> Data Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aggregate</th><th>Key Fields</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>CoreBehaviour</strong></td><td><code>behaviourId</code>, <code>code</code>, <code>name</code>, <code>description</code>, <code>category</code></td><td>Immutable once defined. behaviourId is the stable cross-domain reference.</td></tr>
+              <tr><td><strong>Competency</strong></td><td><code>competencyId</code>, <code>name</code>, <code>behaviourWeights[]</code></td><td>Named cluster of Core Behaviours with weights. Human-facing label.</td></tr>
+              <tr><td><strong>Position</strong></td><td><code>positionId</code>, <code>title</code>, <code>level</code>, <code>competencyWeights[]</code>, <code>coreBehaviourWeights[]</code></td><td>coreBehaviourWeights is the canonical reference for ases.id scoring.</td></tr>
+              <tr><td><strong>ExternalMapping</strong></td><td><code>positionId</code>, <code>source</code>, <code>externalCode</code>, <code>externalTitle</code></td><td>Reference only. Sources: onet, skillsfuture. Never used for scoring.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- app-right -->
+</div><!-- app-layout -->
+<script src="../assets/nav.js"></script>
+</body>
+</html>

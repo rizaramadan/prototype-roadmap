@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>peningkatan.id — Talentlytica Architecture</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>:root { --accent: var(--peningkatan); --hero-bg: var(--peningkatan-dim); }</style>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="left-nav" id="left-nav"></nav>
+
+  <div class="app-right">
+    <div class="topbar">
+      <a href="../index.html" class="breadcrumb-link">Architecture</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">peningkatan.id</span>
+    </div>
+
+    <div class="domain-hero">
+      <p class="eyebrow">HRD Intelligence Domain</p>
+      <h1>peningkatan.id</h1>
+      <p class="tagline">Turns Core Behaviour signals into human decisions — VisMap, career paths, IDPs, succession, and Interventions. The Grafana of Talentlytica.</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><span class="label">URL</span><strong>&lt;client&gt;.peningkatan.id</strong></span>
+        <span class="hero-chip"><span class="label">Model</span><strong>Multi-tenant</strong></span>
+        <span class="hero-chip"><span class="label">Event isolation</span><strong>Per-tenant namespace</strong></span>
+        <span class="hero-chip"><span class="label">Actors</span><strong>HR Manager · Management · Talent</strong></span>
+      </div>
+    </div>
+
+    <main class="main-content">
+
+      <section id="overview">
+        <h2><span class="section-icon">📈</span> Overview</h2>
+        <p class="section-desc">peningkatan.id is the intelligence layer on top of ases.id's raw signals. It doesn't measure — it interprets, visualizes, and enables HR decisions.</p>
+        <div class="callout accent">
+          <span class="callout-icon">📊</span>
+          <p><strong>Grafana analogy:</strong> <a href="ases.html" style="color:var(--ases)">ases.id</a> is the time-series database storing raw Core Behaviour measurements. peningkatan.id is the dashboard layer — HR managers configure views (VisMap), set up alerts (Interventions), and build panels (career paths, succession plans, IDPs) on top of those measurements.</p>
+        </div>
+        <div class="callout">
+          <span class="callout-icon">👤</span>
+          <p><strong>Human-in-the-loop by design:</strong> Interventions are <em>manual</em>. The system surfaces gaps and recommendations, but an HR manager must take the action. peningkatan.id supports human judgment — it doesn't replace it.</p>
+        </div>
+      </section>
+
+      <section id="multitenancy">
+        <h2><span class="section-icon">🏢</span> Multi-tenancy Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aspect</th><th>Behaviour</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Event namespace</strong></td><td>All events prefixed with the tenant identifier. clientA events are invisible to clientB.</td></tr>
+              <tr><td><strong>Data isolation</strong></td><td>Talent data, intervention records, and career paths are fully isolated per tenant.</td></tr>
+              <tr><td><strong>Talentlytica internal subscription</strong></td><td>Talentlytica holds a platform-wide subscription to all tenant event streams for analytics and benchmarking (aggregate/anonymized).</td></tr>
+              <tr><td><strong>Person data portability</strong></td><td>When a talent leaves, their Core Behaviour history is retained in bakat.id — not in the tenant. The tenant holds the working copy; bakat.id holds the canonical portable copy.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2><span class="section-icon">⚙️</span> Services</h2>
+        <div class="card-grid">
+          <div class="card">
+            <p class="card-title">VisMapService</p>
+            <p class="card-desc">Visualizes a talent's Core Behaviour profile against their current and target position requirements. The primary HR intelligence dashboard.</p>
+            <div class="card-meta"><span class="badge badge-query">read-heavy</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">InterventionService</p>
+            <p class="card-desc">Manages manual HR improvement actions. HR logs real-world interventions (coaching, training, reassignment) and tracks outcomes via subsequent ases.id measurements.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span><span class="badge badge-command">accepts commands</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">CareerPathService</p>
+            <p class="card-desc">Defines career progression paths using Core Behaviour delta data from posisi.recru.id. Shows what to develop to move from current to target position.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">IDPService</p>
+            <p class="card-desc">Individual Development Plan management. IDPs are generated from Core Behaviour gaps (current vs. target position) and linked to Interventions.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">SuccessionService</p>
+            <p class="card-desc">Identifies and tracks succession candidates for key positions. Uses Core Behaviour fit scores from ases.id to rank readiness.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">TalentOnboardingService</p>
+            <p class="card-desc">Handles the transition from candidate (recru.id) to talent (peningkatan.id). Consumes CandidateHired and bootstraps the talent's profile in the client tenant.</p>
+            <div class="card-meta"><span class="badge badge-consumes">consumes events</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="publishes">
+        <h2><span class="section-icon">📤</span> Published Events</h2>
+        <p class="section-desc">All events scoped to the originating tenant namespace.</p>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">TalentOnboarded</span>
+            <span class="event-card-desc">A new talent has been onboarded into a client's peningkatan.id tenant.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8"><span class="badge badge-domain-ases">→ ases.id (triggers baseline assessment)</span></div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>talentId</td><td class="type">uuid</td><td>Tenant-scoped identifier</td></tr>
+                <tr><td>personId</td><td class="type">uuid</td><td>bakat.id person reference</td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string</td><td></td></tr>
+                <tr><td>tenantId</td><td class="type">string</td><td></td></tr>
+                <tr><td>positionId</td><td class="type">uuid</td><td>posisi.recru.id position reference</td></tr>
+                <tr><td>onboardedAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>source</td><td class="type">enum</td><td>recru_hired | direct_import</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">InterventionCreated</span>
+            <span class="event-card-desc">An HR manager has logged a real-world improvement action for a talent.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8"><span class="badge badge-domain-ases">→ ases.id (may trigger follow-up assessment)</span></div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>interventionId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>talentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>tenantId</td><td class="type">string</td><td></td></tr>
+                <tr><td>targetBehaviours</td><td class="type">uuid[]</td><td>Core Behaviour IDs being addressed</td></tr>
+                <tr><td>actionType</td><td class="type">enum</td><td>coaching | training | mentoring | reassignment | other</td></tr>
+                <tr><td>description</td><td class="type">string</td><td>HR manager's notes</td></tr>
+                <tr><td>plannedReassessmentAt</td><td class="type">datetime?</td><td>When to re-measure progress</td></tr>
+                <tr><td>createdAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">IDPAssigned</span>
+            <span class="event-card-desc">An Individual Development Plan has been created and assigned to a talent.</span>
+          </div>
+          <div class="event-card-body">
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>idpId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>talentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>currentPositionId</td><td class="type">uuid</td><td>posisi.recru.id reference</td></tr>
+                <tr><td>targetPositionId</td><td class="type">uuid</td><td>posisi.recru.id reference</td></tr>
+                <tr><td>behaviourGaps</td><td class="type">map&lt;behaviourId, float&gt;</td><td>Gap score per Core Behaviour (current – required)</td></tr>
+                <tr><td>assignedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">SuccessionCandidateNominated</span>
+            <span class="event-card-desc">A talent has been identified as a succession candidate for a key position.</span>
+          </div>
+          <div class="event-card-body">
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>nominationId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>talentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>targetPositionId</td><td class="type">uuid</td><td>The key position being succession-planned</td></tr>
+                <tr><td>readinessScore</td><td class="type">float</td><td>0–1, computed from Core Behaviour fit</td></tr>
+                <tr><td>readinessLevel</td><td class="type">enum</td><td>ready_now | ready_1_year | ready_3_years</td></tr>
+                <tr><td>nominatedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">CareerPathDefined</span>
+            <span class="event-card-desc">A career progression path has been mapped for a talent.</span>
+          </div>
+          <div class="event-card-body">
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>pathId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>talentId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>milestones</td><td class="type">positionId[]</td><td>Ordered intermediate positions from posisi.recru.id</td></tr>
+                <tr><td>definedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="consumes">
+        <h2><span class="section-icon">📥</span> Consumed Events</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Event</th><th>Source</th><th>Action in peningkatan.id</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PersonCoreBehaviourProfileUpdated</strong></td><td><span class="badge badge-domain-ases">ases.id</span></td><td>Primary trigger. Updates VisMap. Recalculates fit scores, IDP gaps, and succession readiness.</td></tr>
+              <tr><td><strong>AssessmentCompleted</strong></td><td><span class="badge badge-domain-ases">ases.id</span></td><td>Updates assessment status tracking in the talent's timeline.</td></tr>
+              <tr><td><strong>CandidateHired</strong></td><td><span class="badge badge-domain-recru">recru.id</span></td><td>Triggers TalentOnboardingService to create the talent record in this tenant.</td></tr>
+              <tr><td><strong>ConsentGranted</strong></td><td><span class="badge badge-domain-bakat">bakat.id</span></td><td>Enables fetching the person's portable Core Behaviour history from bakat.id to pre-populate VisMap.</td></tr>
+              <tr><td><strong>PositionRequirementsUpdated</strong></td><td><span class="badge badge-domain-posisi">posisi.recru.id</span></td><td>Recalculates all active fit scores and IDP gaps for talents in affected positions.</td></tr>
+              <tr><td><strong>ProfileUpdated</strong></td><td><span class="badge badge-domain-bakat">bakat.id</span></td><td>Syncs updated personal information into the tenant's talent record.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="commands">
+        <h2><span class="section-icon">⚡</span> Commands</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Command</th><th>Issued by</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><strong>CreateIntervention</strong></td><td><span class="badge badge-external">HR Manager</span></td><td>Log a real-world improvement action. Must specify target Core Behaviours.</td></tr>
+              <tr><td><strong>AssignIDP</strong></td><td><span class="badge badge-external">HR Manager</span></td><td>Create and assign an IDP to a talent, specifying current and target position.</td></tr>
+              <tr><td><strong>DefineCareerPath</strong></td><td><span class="badge badge-external">HR Manager</span></td><td>Map a career progression path for a talent with milestone positions from posisi.recru.id.</td></tr>
+              <tr><td><strong>NominateSuccessionCandidate</strong></td><td><span class="badge badge-external">HR Manager / Management</span></td><td>Nominate a talent as a succession candidate for a key position.</td></tr>
+              <tr><td><strong>TriggerReassessment</strong></td><td><span class="badge badge-external">HR Manager</span></td><td>Issue an assessment assignment to ases.id — typically after an intervention period.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="queries">
+        <h2><span class="section-icon">🔍</span> Queries</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Query</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GetVisMap</strong></td><td>Talent's Core Behaviour scores vs. current position requirements — the primary HR view.</td></tr>
+              <tr><td><strong>GetTeamCapabilityMap</strong></td><td>Aggregated Core Behaviour coverage across a team or department.</td></tr>
+              <tr><td><strong>GetIDPProgress</strong></td><td>Current IDP state: gaps at assignment vs. current scores, improvement delta.</td></tr>
+              <tr><td><strong>GetSuccessionPlan</strong></td><td>All succession candidates for a position, ranked by readiness score.</td></tr>
+              <tr><td><strong>GetCareerPathOptions</strong></td><td>Possible target positions reachable from the talent's current profile, ordered by gap size.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="intervention">
+        <h2><span class="section-icon">🔄</span> Intervention Workflow</h2>
+        <p class="section-desc">The core HR action cycle — observe → act → measure.</p>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-content"><div class="flow-step-title"><strong>Observe</strong> — HR reviews VisMap</div><div class="flow-step-desc">HR manager identifies a Core Behaviour gap between the talent's current profile and their position requirements.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-content"><div class="flow-step-title"><span class="badge badge-command">CreateIntervention</span> — HR logs the action</div><div class="flow-step-desc">HR documents the improvement action: coaching, training, mentorship, etc. Specifies which Core Behaviours are targeted.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-content"><div class="flow-step-title"><strong>Act</strong> — Real-world execution (off-system)</div><div class="flow-step-desc">The intervention happens in the real world. peningkatan.id records and tracks it — it doesn't orchestrate it.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-content"><div class="flow-step-title"><span class="badge badge-command">TriggerReassessment</span> → <span class="badge badge-domain-ases">ases.id</span></div><div class="flow-step-desc">After the intervention period, HR triggers a reassessment. ases.id emits new Core Behaviour scores.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">5</div><div class="flow-step-content"><div class="flow-step-title"><span class="badge badge-consumes">PersonCoreBehaviourProfileUpdated</span> consumed</div><div class="flow-step-desc">New signals update the VisMap. HR compares before/after. IDP gaps are recalculated. Cycle may repeat.</div></div></div>
+        </div>
+      </section>
+
+      <section id="data-model">
+        <h2><span class="section-icon">🗂️</span> Data Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aggregate</th><th>Key Fields</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Talent</strong></td><td><code>talentId</code>, <code>personId</code>, <code>hashedNationalId</code>, <code>tenantId</code>, <code>positionId</code></td><td>Tenant-scoped. Links to bakat.id (personId) and posisi.recru.id (positionId).</td></tr>
+              <tr><td><strong>TalentCoreBehaviourProfile</strong> <span style="font-size:11px;color:var(--text-dim)">(projection)</span></td><td><code>talentId</code>, <code>scores</code>, <code>fitScore</code>, <code>lastUpdated</code></td><td>Derived from ases.id events. Read model for VisMap.</td></tr>
+              <tr><td><strong>Intervention</strong></td><td><code>interventionId</code>, <code>talentId</code>, <code>targetBehaviours[]</code>, <code>actionType</code>, <code>status</code></td><td>Status: open | in_progress | completed | abandoned</td></tr>
+              <tr><td><strong>IDP</strong></td><td><code>idpId</code>, <code>talentId</code>, <code>currentPositionId</code>, <code>targetPositionId</code>, <code>behaviourGaps</code></td><td>behaviourGaps snapshot taken at assignment time for progress tracking.</td></tr>
+              <tr><td><strong>SuccessionNomination</strong></td><td><code>nominationId</code>, <code>talentId</code>, <code>targetPositionId</code>, <code>readinessScore</code>, <code>readinessLevel</code></td><td>Readiness recalculated each time PersonCoreBehaviourProfileUpdated is received.</td></tr>
+              <tr><td><strong>CareerPath</strong></td><td><code>pathId</code>, <code>talentId</code>, <code>milestones[]</code>, <code>currentMilestoneIdx</code></td><td>Milestones are posisi.recru.id positionIds in order.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- app-right -->
+</div><!-- app-layout -->
+<script src="../assets/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>recru.id — Talentlytica Architecture</title>
+  <link rel="stylesheet" href="../assets/styles.css">
+  <style>:root { --accent: var(--recru); --hero-bg: var(--recru-dim); }</style>
+</head>
+<body>
+<div class="app-layout">
+  <nav class="left-nav" id="left-nav"></nav>
+
+  <div class="app-right">
+    <div class="topbar">
+      <a href="../index.html" class="breadcrumb-link">Architecture</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">recru.id</span>
+    </div>
+
+    <div class="domain-hero">
+      <p class="eyebrow">Recruitment Domain</p>
+      <h1>recru.id</h1>
+      <p class="tagline">Multi-tenant ATS and job portal — manages the full hiring funnel from job posting to hire, delegating assessment to ases.id.</p>
+      <div class="hero-meta">
+        <span class="hero-chip"><span class="label">URL</span><strong>&lt;client&gt;.recru.id</strong></span>
+        <span class="hero-chip"><span class="label">Model</span><strong>Multi-tenant</strong></span>
+        <span class="hero-chip"><span class="label">Event isolation</span><strong>Per-tenant namespace</strong></span>
+        <span class="hero-chip"><span class="label">Actors</span><strong>Recruiter · Pencari Kerja (job seeker)</strong></span>
+      </div>
+    </div>
+
+    <main class="main-content">
+
+      <section id="overview">
+        <h2><span class="section-icon">💼</span> Overview</h2>
+        <p class="section-desc">recru.id manages job postings, candidate pipelines, and the handoff to ases.id for assessment — then hands off successful hires to peningkatan.id.</p>
+        <div class="callout accent">
+          <span class="callout-icon">🔀</span>
+          <p><strong>recru.id does not do assessments.</strong> When a candidate reaches the assessment stage, recru.id issues an <code>AssignAssessment</code> command to <a href="ases.html" style="color:var(--ases)">ases.id</a> and waits for <code>PersonCoreBehaviourProfileUpdated</code>. The recruiter sees the fit score in recru.id — but the measurement always happens in ases.id.</p>
+        </div>
+        <div class="callout">
+          <span class="callout-icon">🌉</span>
+          <p><strong>Two candidate entry points:</strong> Candidates apply directly via <code>&lt;client&gt;.recru.id</code>, or they originate from an <strong>external ATS</strong> (e.g., <code>ats.ClientX.com</code>) and are bridged in via the ATSBridgeService. Both paths converge at ases.id.</p>
+        </div>
+      </section>
+
+      <section id="multitenancy">
+        <h2><span class="section-icon">🏢</span> Multi-tenancy Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aspect</th><th>Behaviour</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Deployment</strong></td><td>Each client gets <code>&lt;client&gt;.recru.id</code>. Talentlytica also runs a managed public instance at <code>recru.id</code>.</td></tr>
+              <tr><td><strong>Event namespace</strong></td><td>All events carry a <code>tenantId</code>. Events from clientA are invisible to clientB.</td></tr>
+              <tr><td><strong>Candidate data</strong></td><td>Candidate data is tenant-scoped. The same person applying to two clients appears as separate records within each tenant.</td></tr>
+              <tr><td><strong>Cross-tenant identity</strong></td><td>The hashed national ID allows Talentlytica to recognize the same person across tenants at the platform level — not exposed to individual clients.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2><span class="section-icon">⚙️</span> Services</h2>
+        <div class="card-grid">
+          <div class="card">
+            <p class="card-title">JobPostingService</p>
+            <p class="card-desc">Creates and publishes job postings. Each posting references a <code>positionId</code> from posisi.recru.id, which determines Core Behaviour requirements for fit scoring.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">CandidateService</p>
+            <p class="card-desc">Manages candidate profiles within the tenant. Handles intake, linking to bakat.id profiles via hashed national ID, and tracking pipeline stage.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span><span class="badge badge-consumes">consumes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">ApplicationService</p>
+            <p class="card-desc">Manages the relationship between a candidate and a job posting. Tracks application status through the hiring pipeline stages.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">AssessmentDelegationService</p>
+            <p class="card-desc">Coordinates with ases.id for assessment assignment. Issues <code>AssignAssessment</code> commands and consumes result events back into the pipeline.</p>
+            <div class="card-meta"><span class="badge badge-command">issues commands</span><span class="badge badge-consumes">consumes events</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">ATSBridgeService</p>
+            <p class="card-desc">Anti-corruption layer for external ATS integrations (e.g., ats.ClientX.com). Translates external candidate data and webhooks into recru.id's domain model.</p>
+            <div class="card-meta"><span class="badge badge-external">ACL · webhook</span></div>
+          </div>
+          <div class="card">
+            <p class="card-title">HiringDecisionService</p>
+            <p class="card-desc">Records the final hire/reject decision and emits the corresponding domain event. On hire, triggers the handoff chain to peningkatan.id.</p>
+            <div class="card-meta"><span class="badge badge-publishes">publishes events</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="publishes">
+        <h2><span class="section-icon">📤</span> Published Events</h2>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">JobPosted</span>
+            <span class="event-card-desc">A new job opening has been published on the tenant's portal.</span>
+          </div>
+          <div class="event-card-body">
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>jobId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>tenantId</td><td class="type">string</td><td></td></tr>
+                <tr><td>positionId</td><td class="type">uuid</td><td>posisi.recru.id reference — determines Core Behaviour requirements</td></tr>
+                <tr><td>title</td><td class="type">string</td><td>Display title (may differ from position canonical title)</td></tr>
+                <tr><td>postedAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>closesAt</td><td class="type">datetime?</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">CandidateApplied</span>
+            <span class="event-card-desc">A person has submitted an application for a job opening.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8"><span class="badge badge-domain-bakat">→ bakat.id (for intake linking)</span></div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>applicationId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>jobId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>candidateId</td><td class="type">uuid</td><td>Tenant-scoped candidate identifier</td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string?</td><td>If provided at intake</td></tr>
+                <tr><td>tenantId</td><td class="type">string</td><td></td></tr>
+                <tr><td>source</td><td class="type">enum</td><td>direct | external_ats | bakat_portal</td></tr>
+                <tr><td>appliedAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">AssessmentInvitationSent</span>
+            <span class="event-card-desc">recru.id has requested ases.id to assign an assessment to a candidate.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8"><span class="badge badge-domain-ases">→ ases.id (via AssignAssessment command)</span></div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>applicationId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>assessmentId</td><td class="type">uuid</td><td>Returned by ases.id after AssignAssessment</td></tr>
+                <tr><td>candidateId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>positionId</td><td class="type">uuid</td><td>posisi.recru.id reference for fit scoring context</td></tr>
+                <tr><td>sentAt</td><td class="type">datetime</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">CandidateHired</span>
+            <span class="event-card-desc">A candidate is confirmed as hired. Primary handoff event to peningkatan.id.</span>
+          </div>
+          <div class="event-card-body">
+            <div class="flex flex-wrap gap-8 mt-8">
+              <span class="badge badge-domain-peningkatan">→ peningkatan.id (TalentOnboarded)</span>
+              <span class="badge badge-domain-bakat">→ bakat.id (employment status)</span>
+            </div>
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>applicationId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>candidateId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>hashedNationalId</td><td class="type">string</td><td>Cross-domain linking key for peningkatan.id and bakat.id</td></tr>
+                <tr><td>jobId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>positionId</td><td class="type">uuid</td><td>posisi.recru.id reference — carried to peningkatan.id</td></tr>
+                <tr><td>tenantId</td><td class="type">string</td><td></td></tr>
+                <tr><td>hiredAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>startDate</td><td class="type">date?</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-card-header">
+            <span class="badge badge-publishes">publishes</span>
+            <span class="event-card-title">CandidateRejected</span>
+            <span class="event-card-desc">A candidate has been rejected from a job opening.</span>
+          </div>
+          <div class="event-card-body">
+            <table class="schema-table">
+              <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>applicationId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>candidateId</td><td class="type">uuid</td><td></td></tr>
+                <tr><td>rejectedAt</td><td class="type">datetime</td><td></td></tr>
+                <tr><td>stage</td><td class="type">string</td><td>Stage at which rejection occurred</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="consumes">
+        <h2><span class="section-icon">📥</span> Consumed Events</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Event</th><th>Source</th><th>Action in recru.id</th></tr></thead>
+            <tbody>
+              <tr><td><strong>AssessmentCompleted</strong></td><td><span class="badge badge-domain-ases">ases.id</span></td><td>Advances the application to the post-assessment stage. Notifies recruiter.</td></tr>
+              <tr><td><strong>PersonCoreBehaviourProfileUpdated</strong></td><td><span class="badge badge-domain-ases">ases.id</span></td><td>Updates the candidate's fit score in the recruiter dashboard.</td></tr>
+              <tr><td><strong>ConsentGranted</strong></td><td><span class="badge badge-domain-bakat">bakat.id</span></td><td>Enables recru.id to query the candidate's portable Core Behaviour history from bakat.id.</td></tr>
+              <tr><td><strong>PositionCreated</strong></td><td><span class="badge badge-domain-posisi">posisi.recru.id</span></td><td>Makes new positions available for selection when creating a job posting.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="commands">
+        <h2><span class="section-icon">⚡</span> Commands</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Command</th><th>Issued by</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PostJob</strong></td><td><span class="badge badge-external">Recruiter</span></td><td>Create and publish a job opening. Must reference a posisi.recru.id positionId.</td></tr>
+              <tr><td><strong>AdvanceCandidateStage</strong></td><td><span class="badge badge-external">Recruiter</span></td><td>Move a candidate to the next pipeline stage (screening → assessment → interview → offer).</td></tr>
+              <tr><td><strong>RequestAssessment</strong></td><td><span class="badge badge-external">Recruiter</span></td><td>Triggers AssessmentDelegationService to issue AssignAssessment to ases.id.</td></tr>
+              <tr><td><strong>RecordHiringDecision</strong></td><td><span class="badge badge-external">Recruiter / Hiring Manager</span></td><td>Finalise the hiring outcome: hire or reject.</td></tr>
+              <tr><td><strong>BridgeExternalCandidate</strong></td><td><span class="badge badge-external">ats.ClientX.com (webhook)</span></td><td>ATSBridgeService receives this from external ATS. Translates to a recru.id candidate record and triggers assessment delegation.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="queries">
+        <h2><span class="section-icon">🔍</span> Queries</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Query</th><th>Returns</th></tr></thead>
+            <tbody>
+              <tr><td><strong>GetJobApplications</strong></td><td>All applications for a job, with pipeline stage and fit scores per candidate.</td></tr>
+              <tr><td><strong>GetCandidatePipeline</strong></td><td>Full pipeline view for a candidate across all active applications.</td></tr>
+              <tr><td><strong>GetCandidateFitScore</strong></td><td>The Core Behaviour fit score from ases.id for a specific candidate–job pair.</td></tr>
+              <tr><td><strong>GetAssessmentStatus</strong></td><td>Current status of a delegated assessment: pending | started | completed | expired.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="external-ats">
+        <h2><span class="section-icon">🌉</span> External ATS Bridge</h2>
+        <p class="section-desc">For clients with their own ATS (e.g., <code>ats.ClientX.com</code>), the ATSBridgeService acts as an anti-corruption layer.</p>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="flow-step-num">1</div><div class="flow-step-content"><div class="flow-step-title">Candidate applies on external ATS</div><div class="flow-step-desc">The client's own ATS collects the initial application. Identifies candidates by email or other identifier.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">2</div><div class="flow-step-content"><div class="flow-step-title"><span class="badge badge-external">Webhook</span> → ATSBridgeService</div><div class="flow-step-desc">External ATS posts candidate data (email, job context) to recru.id's bridge endpoint. Bridge translates into a recru.id candidate record.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">3</div><div class="flow-step-content"><div class="flow-step-title"><span class="badge badge-domain-ases">ases.id</span> AssignAssessment</div><div class="flow-step-desc">ATSBridgeService delegates to AssessmentDelegationService, which sends the assessment invite via ases.id.</div></div></div>
+          <div class="flow-step"><div class="flow-step-num">4</div><div class="flow-step-content"><div class="flow-step-title">Results delivered back to external ATS</div><div class="flow-step-desc">When PersonCoreBehaviourProfileUpdated is received from ases.id, ATSBridgeService sends the fit score back to the external ATS via its webhook. Client ATS receives: candidate identifier + fit score.</div></div></div>
+        </div>
+      </section>
+
+      <section id="data-model">
+        <h2><span class="section-icon">🗂️</span> Data Model</h2>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Aggregate</th><th>Key Fields</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Job</strong></td><td><code>jobId</code>, <code>tenantId</code>, <code>positionId</code>, <code>title</code>, <code>status</code>, <code>postedAt</code></td><td>positionId is the posisi.recru.id reference — determines Core Behaviour requirements for fit scoring.</td></tr>
+              <tr><td><strong>Candidate</strong></td><td><code>candidateId</code>, <code>tenantId</code>, <code>email</code>, <code>hashedNationalId?</code>, <code>personId?</code></td><td>personId and hashedNationalId populated when candidate links their bakat.id profile at intake.</td></tr>
+              <tr><td><strong>Application</strong></td><td><code>applicationId</code>, <code>jobId</code>, <code>candidateId</code>, <code>stage</code>, <code>fitScore?</code>, <code>assessmentId?</code>, <code>source</code></td><td>Stage: applied | screening | assessment | interview | offer | hired | rejected. fitScore populated when ases.id emits scores.</td></tr>
+              <tr><td><strong>ExternalATSMapping</strong></td><td><code>externalCandidateRef</code>, <code>candidateId</code>, <code>atsSource</code>, <code>webhookUrl</code></td><td>ATSBridge's mapping table. Links external identifiers to internal recru.id records.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- app-right -->
+</div><!-- app-layout -->
+<script src="../assets/nav.js"></script>
+</body>
+</html>
