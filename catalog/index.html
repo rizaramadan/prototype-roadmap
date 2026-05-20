@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talentlytica — Architecture Catalog</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<!-- ── Top Nav ─────────────────────────────────────────────────────────────── -->
+<nav class="topnav">
+  <span class="topnav-logo">Talentlytica</span>
+  <span class="topnav-sep">/</span>
+  <span style="font-size:13px;color:var(--text-muted)">Architecture Catalog</span>
+  <ul class="topnav-links" style="margin-left:auto">
+    <li><a href="index.html" class="active">Overview</a></li>
+    <li><a href="domains/bakat.html"><span class="topnav-dot" style="background:var(--bakat)"></span>bakat.id</a></li>
+    <li><a href="domains/ases.html"><span class="topnav-dot" style="background:var(--ases)"></span>ases.id</a></li>
+    <li><a href="domains/peran.html"><span class="topnav-dot" style="background:var(--peran)"></span>peran.id</a></li>
+    <li><a href="domains/peningkatan.html"><span class="topnav-dot" style="background:var(--peningkatan)"></span>peningkatan.id</a></li>
+    <li><a href="domains/recru.html"><span class="topnav-dot" style="background:var(--recru)"></span>recru.id</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────────────────────────────── -->
+<div class="index-hero">
+  <p class="mission">Talentlytica · Event-Driven Architecture</p>
+  <h1>Right <em>Person</em>.<br>Right <span class="pos">Position</span>.</h1>
+  <p class="subtitle">A federated ecosystem of platforms connected by events, unified by a shared ontology of <strong style="color:var(--peningkatan)">Core Behaviours</strong>.</p>
+</div>
+
+<!-- ── Shared Kernel ───────────────────────────────────────────────────────── -->
+<div class="kernel-section">
+  <h2 style="font-size:16px;font-weight:600;color:var(--text-muted);margin-bottom:16px;text-align:center;letter-spacing:.06em;text-transform:uppercase">Shared Kernel — Core Behaviour Ontology</h2>
+  <div class="kernel-diagram">
+    <div class="kernel-node core">
+      <span class="kn-label">Core Behaviour</span>
+      <span class="kn-sub">atom · Talentlytica IP</span>
+    </div>
+    <span class="kernel-arrow">→</span>
+    <div class="kernel-node">
+      <span class="kn-label">Skills &amp; Competencies</span>
+      <span class="kn-sub">molecule</span>
+    </div>
+    <span class="kernel-arrow">→</span>
+    <div class="kernel-node">
+      <span class="kn-label">Position</span>
+      <span class="kn-sub">compound</span>
+    </div>
+    <span class="kernel-arrow" style="padding:0 24px">↕</span>
+    <div class="kernel-node">
+      <span class="kn-label">Person Profile</span>
+      <span class="kn-sub">compound</span>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:13px;color:var(--text-muted);margin-top:12px">
+    Every domain speaks the language of Core Behaviours. This enables clustering, matching, and cross-platform intelligence.
+  </p>
+</div>
+
+<!-- ── Cross-cutting ──────────────────────────────────────────────────────── -->
+<div style="max-width:800px;margin:0 auto 40px;padding:0 48px">
+  <div class="callout">
+    <span class="callout-icon">🔗</span>
+    <p>
+      <strong>Identity linking:</strong> A <strong>hashed national ID</strong> is the cross-domain person key. Each platform collects it at intake. No single source of truth — federated identity, one canonical anchor.<br><br>
+      <strong>Consent model:</strong> Per-platform, person-granted. Managed via <code>bakat.id</code>. When a person moves between employers, their portable data stays in <code>bakat.id</code> and they explicitly authorize each new platform to read it.<br><br>
+      <strong>Multi-tenancy:</strong> <code>peningkatan.id</code> and <code>recru.id</code> are deployed as <code>&lt;client&gt;.peningkatan.id</code> / <code>&lt;client&gt;.recru.id</code>. Events are tenant-isolated; Talentlytica holds an internal platform-wide subscription for analytics.
+    </p>
+  </div>
+</div>
+
+<!-- ── Domain Cards ────────────────────────────────────────────────────────── -->
+<div class="domain-grid">
+
+  <a href="domains/bakat.html" class="domain-card" style="--accent:var(--bakat);--hero-bg:var(--bakat-dim)">
+    <p class="dc-eyebrow">Person Domain</p>
+    <h3>bakat.id</h3>
+    <p>Portable person profile and passport. Consent control plane for cross-platform data portability. The person's permanent career record — survives employers.</p>
+    <div class="dc-url"><span class="dot"></span> bakat.id · siswa · beasiswa · award</div>
+  </a>
+
+  <a href="domains/ases.html" class="domain-card" style="--accent:var(--ases);--hero-bg:var(--ases-dim)">
+    <p class="dc-eyebrow">Assessment Domain</p>
+    <h3>ases.id</h3>
+    <p>Core Behaviour signal ingestion and storage. The measurement engine — all assessments across every platform funnel here. Think VictoriaMetrics: ingest, store, emit.</p>
+    <div class="dc-url"><span class="dot"></span> ases.id · shared platform service</div>
+  </a>
+
+  <a href="domains/peran.html" class="domain-card" style="--accent:var(--peran);--hero-bg:var(--peran-dim)">
+    <p class="dc-eyebrow">Position Domain</p>
+    <h3>peran.id</h3>
+    <p>Position and role taxonomy expressed in Core Behaviours. The canonical reference for what any role demands. Analogous to O*NET or SkillsFuture — but Talentlytica-native.</p>
+    <div class="dc-url"><span class="dot"></span> peran.id · position master data</div>
+  </a>
+
+  <a href="domains/peningkatan.html" class="domain-card" style="--accent:var(--peningkatan);--hero-bg:var(--peningkatan-dim)">
+    <p class="dc-eyebrow">HRD Intelligence Domain</p>
+    <h3>peningkatan.id</h3>
+    <p>Multi-tenant HR intelligence platform. Reads ases.id signals and turns them into decisions: VisMap, career paths, succession plans, IDPs, and Interventions. Think Grafana.</p>
+    <div class="dc-url"><span class="dot"></span> &lt;client&gt;.peningkatan.id · multi-tenant</div>
+  </a>
+
+  <a href="domains/recru.html" class="domain-card" style="--accent:var(--recru);--hero-bg:var(--recru-dim)">
+    <p class="dc-eyebrow">Recruitment Domain</p>
+    <h3>recru.id</h3>
+    <p>Multi-tenant ATS and job portal. Manages the full hiring funnel — job posting, candidate pipeline, assessment delegation to ases.id, and handoff to peningkatan.id upon hire.</p>
+    <div class="dc-url"><span class="dot"></span> &lt;client&gt;.recru.id · multi-tenant</div>
+  </a>
+
+</div>
+
+<!-- ── Key Flows ───────────────────────────────────────────────────────────── -->
+<div style="max-width:800px;margin:0 auto 64px;padding:0 48px">
+  <h2 style="font-size:18px;font-weight:600;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)">Key Cross-Domain Flows</h2>
+
+  <!-- Flow 1 -->
+  <h3 style="font-size:13px;font-weight:600;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Recruitment → Assessment → Hire</h3>
+  <div class="flow-steps" style="margin-bottom:32px">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-recru">recru.id</span> Job posted, candidate applies</div>
+        <div class="flow-step-desc">Candidate applies via <code>recru.id</code> or an external ATS (<code>ats.ClientX.com</code>). Application triggers assessment delegation.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-ases">ases.id</span> AssessmentAssigned</div>
+        <div class="flow-step-desc">Candidate is invited via email. They log in (or register) on <code>ases.id</code> and complete the assessment. Raw Core Behaviour signals are stored.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-publishes">PersonCoreBehaviourProfileUpdated</span> emitted</div>
+        <div class="flow-step-desc"><code>ases.id</code> emits the event. <code>recru.id</code> and <code>bakat.id</code> both consume it — recruiter sees fit, and the result is retained in the person's portable profile.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-recru">recru.id</span> CandidateHired → peningkatan.id TalentOnboarded</div>
+        <div class="flow-step-desc">On hire, <code>recru.id</code> emits <code>CandidateHired</code>. The client's <code>peningkatan.id</code> listens and onboards the person as a talent.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flow 2 -->
+  <h3 style="font-size:13px;font-weight:600;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Data Portability — Person Moves Between Employers</h3>
+  <div class="flow-steps" style="margin-bottom:32px">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-ases">ases.id</span> Assessment done at Client A</div>
+        <div class="flow-step-desc">Learning Agility and other Core Behaviour scores are measured and emitted as <code>AssessmentCompleted</code>.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-bakat">bakat.id</span> AssessmentResultRetained</div>
+        <div class="flow-step-desc">Result is stored in the person's portable profile in <code>bakat.id</code>, independent of Client A's tenant.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-bakat">bakat.id</span> ConsentGranted to Client B</div>
+        <div class="flow-step-desc">Person joins Client B, goes to <code>bakat.id</code>, and authorizes <code>clientB.peningkatan.id</code> to read their retained data.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-peningkatan">peningkatan.id</span> Consumes historical profile</div>
+        <div class="flow-step-desc">Client B's <code>peningkatan.id</code> receives <code>ConsentGranted</code> and immediately queries the person's portable Core Behaviour history from <code>bakat.id</code>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flow 3 -->
+  <h3 style="font-size:13px;font-weight:600;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Intervention Cycle</h3>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-peningkatan">peningkatan.id</span> HR identifies a gap via VisMap</div>
+        <div class="flow-step-desc">HR manager views the talent's Core Behaviour profile against position requirements in the VisMap dashboard.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-command">CreateIntervention</span> command issued</div>
+        <div class="flow-step-desc">HR logs a real-world improvement action (Intervention). An IDP is assigned. This is a manual human decision, not an automated trigger.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-ases">ases.id</span> Re-assessment triggered</div>
+        <div class="flow-step-desc">After the intervention period, a new assessment is assigned to measure progress on the targeted Core Behaviours.</div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-content">
+        <div class="flow-step-title"><span class="badge badge-domain-peningkatan">peningkatan.id</span> VisMap updated</div>
+        <div class="flow-step-desc">New signals flow back. The talent's VisMap reflects improvement. The cycle repeats as needed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── External Systems ────────────────────────────────────────────────────── -->
+<div style="max-width:800px;margin:0 auto 64px;padding:0 48px">
+  <h2 style="font-size:18px;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">External Systems (ACL)</h2>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>System</th><th>Role</th><th>Integration Point</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>onetonline.org</strong></td>
+          <td class="text-muted">Occupational taxonomy reference (similar to peran.id)</td>
+          <td><span class="badge badge-external">read · import</span></td>
+        </tr>
+        <tr>
+          <td><strong>skillsfuture.gov.sg</strong></td>
+          <td class="text-muted">Skills framework reference (similar to peran.id)</td>
+          <td><span class="badge badge-external">read · import</span></td>
+        </tr>
+        <tr>
+          <td><strong>ats.ClientX.com</strong></td>
+          <td class="text-muted">External client ATS — triggers assessment invitations, receives results</td>
+          <td><span class="badge badge-external">webhook · bridge</span></td>
+        </tr>
+        <tr>
+          <td><strong>edulab / AI Visor</strong></td>
+          <td class="text-muted">Learning platform — potential partner for siswa.bakat.id</td>
+          <td><span class="badge badge-external">potential partner</span></td>
+        </tr>
+        <tr>
+          <td><strong>intikom</strong></td>
+          <td class="text-muted">Institutional partner — scholarship &amp; award validation</td>
+          <td><span class="badge badge-external">potential partner</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>
