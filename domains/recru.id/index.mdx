@@ -1,0 +1,31 @@
+---
+id: recru.id
+name: recru.id
+summary: Multi-tenant ATS and job portal — manages the full hiring funnel from job posting to hire, delegating assessment to ases.id
+version: 1.0.0
+owners:
+  - riza
+  - product
+domains:
+  - id: posisi.recru.id
+services:
+  - id: JobPostingService
+  - id: CandidateService
+  - id: ApplicationService
+  - id: AssessmentDelegationService
+  - id: ATSBridgeService
+  - id: HiringDecisionService
+badges:
+  - content: Recruitment Domain
+    backgroundColor: orange
+    textColor: orange
+  - content: Multi-tenant
+    backgroundColor: yellow
+    textColor: yellow
+---
+
+recru.id manages job postings, candidate pipelines, and the handoff to ases.id for assessment — then hands off successful hires to peningkatan.id.
+
+**recru.id does not do assessments.** When a candidate reaches the assessment stage, recru.id issues an `AssignAssessment` command to ases.id and waits for `PersonCoreBehaviourProfileUpdated`. The recruiter sees the fit score in recru.id — but the measurement always happens in ases.id.
+
+<NodeGraph />

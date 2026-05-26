@@ -1,0 +1,29 @@
+---
+id: bakat.id
+name: bakat.id
+summary: The person's permanent career identity — portable across employers, owned by the individual
+version: 1.0.0
+owners:
+  - riza
+  - product
+services:
+  - id: ProfileService
+  - id: ConsentService
+  - id: PortabilityService
+domains:
+  - id: siswa.bakat.id
+  - id: beasiswa.bakat.id
+  - id: award.bakat.id
+badges:
+  - content: Person Domain
+    backgroundColor: purple
+    textColor: purple
+---
+
+bakat.id holds the individual's profile, portable assessment history, and serves as the consent control plane for cross-platform data sharing.
+
+**Portability principle:** Data earned at one employer (e.g., Learning Agility score at Client A) is retained in bakat.id and travels with the person. When they join Client B, they authorize that client to read it.
+
+**Consent model:** Each platform that wants to read a person's retained data must be explicitly authorized by the person. Consent is scoped and revocable at any time.
+
+<NodeGraph />

@@ -1,0 +1,33 @@
+---
+id: AssessmentCompleted
+name: Assessment Completed
+version: 1.0.0
+summary: The person has finished the assessment. Raw responses are stored.
+owners:
+  - platform
+---
+The person has finished the assessment. Raw responses are stored.
+
+## Subscribers
+- bakat.id → PortabilityService retains Core Behaviour scores
+- recru.id → advances application to post-assessment stage
+- peningkatan.id → updates assessment status in talent timeline
+- external ATS (webhook)
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentId | uuid | |
+| personId | uuid? | |
+| hashedNationalId | string? | |
+| completedAt | datetime | |
+| duration | integer | seconds |

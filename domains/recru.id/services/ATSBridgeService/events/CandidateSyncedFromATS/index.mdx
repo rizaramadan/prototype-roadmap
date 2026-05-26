@@ -1,0 +1,43 @@
+---
+id: CandidateSyncedFromATS
+name: CandidateSyncedFromATS
+version: 1.0.0
+summary: A candidate record has been imported from an external ATS into recru.id
+owners:
+  - product
+---
+Emitted after ATSBridgeService successfully creates or updates a candidate in CandidateService. Provides the cross-reference between the external ATS ID and the internal candidateId for downstream traceability.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field       | Type     | Notes                                              |
+|-------------|----------|----------------------------------------------------|
+| candidateId | uuid     | Internal recru.id candidate identifier             |
+| atsSource   | enum     | workday \| greenhouse \| lever \| successfactors   |
+| atsId       | string   | Candidate ID in the external system                |
+| tenantId    | string   | Hiring organization                                |
+| syncedAt    | datetime | ISO 8601                                           |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CandidateSyncedFromATS",
+  "type": "object",
+  "required": ["candidateId", "atsSource", "atsId", "tenantId", "syncedAt"],
+  "properties": {
+    "candidateId": { "type": "string", "format": "uuid" },
+    "atsSource":   { "type": "string", "enum": ["workday", "greenhouse", "lever", "successfactors"] },
+    "atsId":       { "type": "string" },
+    "tenantId":    { "type": "string" },
+    "syncedAt":    { "type": "string", "format": "date-time" }
+  }
+}
+```

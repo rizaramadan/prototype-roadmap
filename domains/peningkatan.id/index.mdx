@@ -1,0 +1,31 @@
+---
+id: peningkatan.id
+name: peningkatan.id
+summary: Turns Core Behaviour signals into human decisions — VisMap, career paths, IDPs, succession, and Interventions
+version: 1.0.0
+owners:
+  - riza
+  - product
+services:
+  - id: VisMapService
+  - id: InterventionService
+  - id: CareerPathService
+  - id: IDPService
+  - id: SuccessionService
+  - id: TalentOnboardingService
+badges:
+  - content: HRD Intelligence
+    backgroundColor: green
+    textColor: green
+  - content: Multi-tenant
+    backgroundColor: yellow
+    textColor: yellow
+---
+
+peningkatan.id is the intelligence layer on top of ases.id's raw signals. It doesn't measure — it interprets, visualizes, and enables HR decisions.
+
+**Grafana analogy:** ases.id is the time-series database storing raw Core Behaviour measurements. peningkatan.id is the dashboard layer — HR managers configure views (VisMap), set up alerts (Interventions), and build panels (career paths, succession plans, IDPs) on top of those measurements.
+
+**Human-in-the-loop by design:** Interventions are manual. The system surfaces gaps and recommendations, but an HR manager must take the action.
+
+<NodeGraph />

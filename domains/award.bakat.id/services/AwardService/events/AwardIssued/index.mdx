@@ -1,0 +1,45 @@
+---
+id: AwardIssued
+name: AwardIssued
+version: 1.0.0
+summary: A recognition award has been added to a person's bakat.id profile
+owners:
+  - product
+---
+Emitted when an award is successfully recorded. The award is visible on the person's portable bakat.id profile and may trigger notifications to the recipient.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field              | Type     | Notes                                             |
+|--------------------|----------|---------------------------------------------------|
+| awardId            | uuid     | Unique identifier for this award record           |
+| personId           | uuid     | bakat.id identifier of the recipient              |
+| awardType          | enum     | top_performer \| learning_agility \| consistency  |
+| sourceAssessmentId | uuid?    | Assessment that triggered this award              |
+| tenantId           | string   | Issuing organization                              |
+| issuedAt           | datetime | ISO 8601                                          |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AwardIssued",
+  "type": "object",
+  "required": ["awardId", "personId", "awardType", "tenantId", "issuedAt"],
+  "properties": {
+    "awardId":            { "type": "string", "format": "uuid" },
+    "personId":           { "type": "string", "format": "uuid" },
+    "awardType":          { "type": "string", "enum": ["top_performer", "learning_agility", "consistency"] },
+    "sourceAssessmentId": { "type": "string", "format": "uuid" },
+    "tenantId":           { "type": "string" },
+    "issuedAt":           { "type": "string", "format": "date-time" }
+  }
+}
+```

@@ -1,0 +1,17 @@
+---
+id: ScoringService
+name: Scoring Service
+version: 1.0.0
+summary: Computes Core Behaviour scores from raw responses
+owners:
+  - platform
+sends:
+  - id: AssessmentCompleted
+  - id: PersonCoreBehaviourProfileUpdated
+receives:
+  - id: GetAssessmentResult
+  - id: GetPersonCoreBehaviourHistory
+---
+Computes Core Behaviour scores from raw responses. Scores are normalized against position requirements sourced from posisi.recru.id.
+
+<NodeGraph />

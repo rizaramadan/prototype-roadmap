@@ -1,0 +1,41 @@
+---
+id: CompetencyDefined
+name: CompetencyDefined
+version: 1.0.0
+summary: A new competency cluster has been added to the posisi ontology
+owners:
+  - platform
+---
+Emitted when a competency is successfully created. PositionTaxonomyService listens to keep position requirement profiles consistent with the latest competency definitions.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field             | Type     | Notes                                              |
+|-------------------|----------|----------------------------------------------------|
+| competencyId      | uuid     | New competency's identifier                        |
+| name              | string   | Human-readable competency name                     |
+| coreBehaviourIds  | uuid[]   | Core Behaviours that form this competency          |
+| definedAt         | datetime | ISO 8601                                           |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CompetencyDefined",
+  "type": "object",
+  "required": ["competencyId", "name", "coreBehaviourIds", "definedAt"],
+  "properties": {
+    "competencyId":     { "type": "string", "format": "uuid" },
+    "name":             { "type": "string" },
+    "coreBehaviourIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "definedAt":        { "type": "string", "format": "date-time" }
+  }
+}
+```

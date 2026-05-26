@@ -1,0 +1,18 @@
+---
+id: IntakeService
+name: Intake Service
+version: 1.0.0
+summary: Handles person onboarding within ases.id
+owners:
+  - platform
+sends:
+  - id: ReassessmentInitiated
+    to:
+      - id: eventstore.assessments
+receives:
+  - id: ConsentGranted
+  - id: ReassessWithPreviousData
+---
+Handles person onboarding within ases.id. Offers "use previous data or re-intake" for returning persons. Links to bakat.id profile via hashed national ID.
+
+<NodeGraph />

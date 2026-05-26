@@ -1,0 +1,17 @@
+---
+id: InvitationService
+name: Invitation Service
+version: 1.0.0
+summary: Manages assessment invitations sent via email
+owners:
+  - platform
+sends:
+  - id: InvitationSent
+    to:
+      - id: eventstore.assessments
+receives:
+  - id: SendInvitation
+---
+Manages assessment invitations sent via email. Handles both direct invites (from peningkatan.id) and bridged invites (from external ATS systems).
+
+<NodeGraph />

@@ -1,0 +1,45 @@
+---
+id: StudentProfileUpdated
+name: StudentProfileUpdated
+version: 1.0.0
+summary: A student's academic profile (GPA, status, graduation date) has been updated
+owners:
+  - product
+---
+Emitted after a successful update to a student's academic record. beasiswa.bakat.id re-evaluates eligibility on this event.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field          | Type     | Notes                                               |
+|----------------|----------|-----------------------------------------------------|
+| studentId      | string   | Institution-assigned student ID                     |
+| personId       | uuid     | bakat.id person identifier                          |
+| gpa            | number?  | Updated GPA if changed                              |
+| programStatus  | enum?    | active \| graduated \| withdrawn \| on_leave        |
+| graduationDate | date?    | Set when status → graduated                         |
+| updatedAt      | datetime | ISO 8601                                            |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudentProfileUpdated",
+  "type": "object",
+  "required": ["studentId", "personId", "updatedAt"],
+  "properties": {
+    "studentId":      { "type": "string" },
+    "personId":       { "type": "string", "format": "uuid" },
+    "gpa":            { "type": "number", "minimum": 0, "maximum": 4 },
+    "programStatus":  { "type": "string", "enum": ["active", "graduated", "withdrawn", "on_leave"] },
+    "graduationDate": { "type": "string", "format": "date" },
+    "updatedAt":      { "type": "string", "format": "date-time" }
+  }
+}
+```

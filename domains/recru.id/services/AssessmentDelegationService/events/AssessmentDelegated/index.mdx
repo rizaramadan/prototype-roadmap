@@ -1,0 +1,45 @@
+---
+id: AssessmentDelegated
+name: AssessmentDelegated
+version: 1.0.0
+summary: Assessment has been successfully assigned to a candidate — ases.id invitation flow begins
+owners:
+  - product
+---
+Emitted once AssessmentDelegationService has received confirmation from IngestionService that the assessment was created (`AssessmentAssigned`). ApplicationService consumes this to track that the candidate is awaiting assessment.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field              | Type     | Notes                                          |
+|--------------------|----------|------------------------------------------------|
+| delegationId       | uuid     | Unique identifier for this delegation record   |
+| candidateId        | uuid     | Candidate in the recruitment funnel            |
+| jobId              | uuid     | Job the candidate applied for                  |
+| assessmentId       | uuid     | Assessment instance created in ases.id         |
+| tenantId           | string   | Hiring organization                            |
+| delegatedAt        | datetime | ISO 8601                                       |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssessmentDelegated",
+  "type": "object",
+  "required": ["delegationId", "candidateId", "jobId", "assessmentId", "tenantId", "delegatedAt"],
+  "properties": {
+    "delegationId": { "type": "string", "format": "uuid" },
+    "candidateId":  { "type": "string", "format": "uuid" },
+    "jobId":        { "type": "string", "format": "uuid" },
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "tenantId":     { "type": "string" },
+    "delegatedAt":  { "type": "string", "format": "date-time" }
+  }
+}
+```

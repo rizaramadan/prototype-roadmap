@@ -1,0 +1,75 @@
+---
+id: Person
+name: Person
+version: 1.0.0
+summary: A human's permanent career identity — portable across employers and contexts
+aggregateRoot: true
+identifier: personId
+owners:
+  - product
+badges:
+  - content: Aggregate Root
+    backgroundColor: blue
+    textColor: blue
+  - content: bakat.id
+    backgroundColor: purple
+    textColor: purple
+properties:
+  - name: personId
+    type: uuid
+    required: true
+    description: Internal bakat.id identifier
+  - name: hashedNationalId
+    type: string
+    required: true
+    description: Cross-domain linking key — SHA-256 of national ID
+  - name: email
+    type: string
+    required: true
+    description: Primary contact address
+  - name: source
+    type: enum
+    required: true
+    description: "www | siswa | beasiswa | recru_intake | ases_intake"
+  - name: registeredAt
+    type: datetime
+    required: true
+    description: When the profile was created
+  - name: consentState
+    type: enum
+    required: true
+    description: "none | granted | revoked"
+  - name: coreBehaviourProfile
+    type: object
+    required: false
+    description: Latest scored Core Behaviour profile (updated by ScoringService)
+---
+
+## Portability principle
+
+A Person's data (assessments, awards, IDP records) is owned by the individual, not by any employer. When a person moves between tenants, the `PersonCoreBehaviourProfileUpdated` event travels with them — the new employer's consent gate determines which data they can read.
+
+## Invariants
+
+- `hashedNationalId` is immutable after registration
+- `consentState` transitions: `none → granted → revoked → granted` (cyclic — consent is revocable and re-grantable)
+- `coreBehaviourProfile` may only be written by ScoringService via `PersonCoreBehaviourProfileUpdated`
+- A Person aggregate must exist before any Assessment can be assigned
+
+## Commands
+
+| Command        | Guard                                         |
+|----------------|-----------------------------------------------|
+| RegisterPerson | hashedNationalId must not already exist        |
+| UpdateProfile  | personId must exist                           |
+| GrantConsent   | consentState must be `none` or `revoked`      |
+| RevokeConsent  | consentState must be `granted`               |
+
+## Events emitted
+
+| Event                             | Trigger              |
+|-----------------------------------|----------------------|
+| PersonRegistered                  | RegisterPerson       |
+| ProfileUpdated                    | UpdateProfile        |
+| ConsentGranted                    | GrantConsent         |
+| ConsentRevoked                    | RevokeConsent        |

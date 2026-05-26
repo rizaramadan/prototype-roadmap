@@ -1,0 +1,45 @@
+---
+id: eventstore.talent_development
+name: eventstore → talent_development
+version: 1.0.0
+summary: HR intelligence events — onboarding, interventions, IDPs, succession, career paths
+owners:
+  - riza
+  - platform
+address: eventstore.talent_development
+protocols:
+  - postgresql
+---
+
+PostgreSQL table `talent_development` in the `eventstore` database. Owned by the `peningkatan.id` domain.
+
+<ChannelInformation />
+
+## Table Schema
+
+```sql
+CREATE TABLE talent_development (
+  id             UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  aggregate_id   UUID        NOT NULL,
+  event_type     VARCHAR     NOT NULL,
+  event_version  VARCHAR     NOT NULL,
+  payload        JSONB       NOT NULL,
+  occurred_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  tenant_id      VARCHAR,
+  trace_id       UUID,
+  correlation_id UUID,
+  causation_id   UUID,
+  INDEX (aggregate_id),
+  INDEX (event_type),
+  INDEX (occurred_at),
+  INDEX (trace_id)
+);
+```
+
+## Event types in this table
+
+- `TalentOnboarded`
+- `InterventionCreated`
+- `IDPAssigned`
+- `SuccessionCandidateNominated`
+- `CareerPathDefined`

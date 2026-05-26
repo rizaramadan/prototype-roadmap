@@ -1,0 +1,19 @@
+---
+id: ApplicationService
+name: ApplicationService
+version: 1.0.0
+summary: Manages the relationship between a candidate and a job posting
+owners:
+  - product
+sends:
+  - id: AssessmentInvitationSent
+    to:
+      - id: eventstore.recruitment
+receives:
+  - id: AssessmentCompleted
+    from:
+      - id: eventstore.assessments
+---
+Manages the relationship between a candidate and a job posting.
+
+<NodeGraph />

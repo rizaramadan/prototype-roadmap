@@ -1,0 +1,43 @@
+---
+id: CompetencyUpdated
+name: CompetencyUpdated
+version: 1.0.0
+summary: A competency's name, description, or Core Behaviour membership has changed
+owners:
+  - platform
+---
+Emitted after a successful competency update. Downstream systems that cache competency definitions must invalidate on this event.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field                   | Type     | Notes                                              |
+|-------------------------|----------|----------------------------------------------------|
+| competencyId            | uuid     | Updated competency                                 |
+| name                    | string?  | New name if changed                                |
+| addedCoreBehaviourIds   | uuid[]?  | Core Behaviours added in this update               |
+| removedCoreBehaviourIds | uuid[]?  | Core Behaviours removed in this update             |
+| updatedAt               | datetime | ISO 8601                                           |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CompetencyUpdated",
+  "type": "object",
+  "required": ["competencyId", "updatedAt"],
+  "properties": {
+    "competencyId":            { "type": "string", "format": "uuid" },
+    "name":                    { "type": "string" },
+    "addedCoreBehaviourIds":   { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "removedCoreBehaviourIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "updatedAt":               { "type": "string", "format": "date-time" }
+  }
+}
+```

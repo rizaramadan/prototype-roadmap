@@ -1,0 +1,20 @@
+---
+id: AwardService
+name: AwardService
+version: 1.0.0
+summary: Recognition and achievement tracking on award.bakat.id
+owners:
+  - product
+sends:
+  - id: AwardIssued
+    to:
+      - id: eventstore.persons
+receives:
+  - id: IssueAward
+  - id: AssessmentCompleted
+    from:
+      - id: eventstore.assessments
+---
+Recognition and achievement tracking on award.bakat.id.
+
+<NodeGraph />

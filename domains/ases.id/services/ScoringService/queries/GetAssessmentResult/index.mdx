@@ -1,0 +1,48 @@
+---
+id: GetAssessmentResult
+name: Get Assessment Result
+version: 1.0.0
+summary: Retrieve full assessment result including Core Behaviour scores and fit score
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/assessments/{assessmentId}/result"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** Platform with active consent or same-tenant
+
+**Returns:** Full assessment result: coreBehaviourScores, fitScore, positionId, scoredAt
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Served from the `assessment_results` projection table — materialized from `AssessmentCompleted` + `PersonCoreBehaviourProfileUpdated` events.
+
+```sql
+CREATE TABLE assessment_results (
+  assessment_id          UUID        PRIMARY KEY,
+  person_id              UUID        NOT NULL,
+  tenant_id              VARCHAR     NOT NULL,
+  position_id            UUID,
+  core_behaviour_scores  JSONB       NOT NULL,
+  fit_score              NUMERIC(4,3),
+  scored_at              TIMESTAMPTZ NOT NULL,
+  INDEX (person_id),
+  INDEX (tenant_id, scored_at)
+);
+```
+
+<NodeGraph />

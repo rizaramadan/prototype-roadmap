@@ -1,0 +1,28 @@
+---
+id: AssignAssessment
+name: Assign Assessment
+version: 1.0.0
+summary: Request to create and assign an assessment to a person
+owners:
+  - platform
+---
+Issued by: **recru.id · peningkatan.id · external ATS**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| positionId | uuid? | posisi.recru.id reference for fit scoring |
+| tenantId | string | Originating tenant |
+| inviteeEmail | string | Invitation delivery address |
+| hashedNationalId | string? | If known |
+
+<NodeGraph />

@@ -1,0 +1,30 @@
+---
+id: NominateSuccessionCandidate
+name: Nominate Succession Candidate
+version: 1.0.0
+summary: Nominate a talent as a succession candidate for a key position
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /succession/nominations
+---
+Issued by: **HR Manager**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| talentId | uuid | |
+| targetPositionId | uuid | The key position being succession-planned |
+
+<NodeGraph />

@@ -1,0 +1,49 @@
+---
+id: GetAssessmentStatus
+name: Get Assessment Status
+version: 1.0.0
+summary: "Current status of an assessment: pending | started | completed | expired"
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/assessments/{assessmentId}/status"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** Any authorized platform
+
+**Returns:** `{ assessmentId, status, startedAt?, completedAt? }`
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Served from the `assessment_status` projection — a lightweight current-state table updated by `AssessmentAssigned`, `AssessmentStarted`, and `AssessmentCompleted` events.
+
+```sql
+CREATE TABLE assessment_status (
+  assessment_id  UUID        PRIMARY KEY,
+  status         VARCHAR     NOT NULL,
+  -- 'pending' | 'started' | 'completed' | 'expired'
+  started_at     TIMESTAMPTZ,
+  completed_at   TIMESTAMPTZ,
+  expires_at     TIMESTAMPTZ,
+  tenant_id      VARCHAR     NOT NULL,
+  person_id      UUID        NOT NULL,
+  INDEX (person_id),
+  INDEX (tenant_id, status)
+);
+```
+
+<NodeGraph />

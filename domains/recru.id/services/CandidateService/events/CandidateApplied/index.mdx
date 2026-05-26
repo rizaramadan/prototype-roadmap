@@ -1,0 +1,29 @@
+---
+id: CandidateApplied
+name: CandidateApplied
+version: 1.0.0
+summary: A person has submitted an application for a job opening
+owners:
+  - product
+---
+A person has submitted an application for a job opening.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| applicationId | uuid | |
+| jobId | uuid | |
+| candidateId | uuid | Tenant-scoped candidate identifier |
+| hashedNationalId | string? | If provided at intake |
+| tenantId | string | |
+| source | enum | direct \| external_ats \| bakat_portal |
+| appliedAt | datetime | |

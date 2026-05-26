@@ -1,0 +1,46 @@
+---
+id: GetPositionRequirements
+name: Get Position Requirements
+version: 1.0.0
+summary: Full Core Behaviour weight profile for a given positionId
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/positions/{positionId}/requirements"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** Any platform
+
+**Returns:** `positionId`, `title`, `level`, `coreBehaviourWeights`
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Served from the `positions` projection table — materialized from `PositionCreated` and `PositionRequirementsUpdated` events.
+
+```sql
+CREATE TABLE positions (
+  position_id               UUID         PRIMARY KEY,
+  title                     VARCHAR      NOT NULL,
+  level                     VARCHAR      NOT NULL,
+  core_behaviour_requirements JSONB      NOT NULL,
+  -- [{ coreBehaviourId, minScore, weight }]
+  updated_at                TIMESTAMPTZ NOT NULL,
+  INDEX (title)
+);
+```
+
+<NodeGraph />

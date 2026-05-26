@@ -1,0 +1,27 @@
+---
+id: InitiateIntake
+name: Initiate Intake
+version: 1.0.0
+summary: Called when an external platform needs to link or create a bakat.id profile during their onboarding flow
+owners:
+  - platform
+---
+Issued by: **ases.id · recru.id**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| hashedNationalId | string? | |
+| email | string | |
+| sourceplatform | string | Calling platform identifier |
+
+<NodeGraph />

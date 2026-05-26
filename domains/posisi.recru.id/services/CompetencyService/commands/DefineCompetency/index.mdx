@@ -1,0 +1,52 @@
+---
+id: DefineCompetency
+name: Define Competency
+version: 1.0.0
+summary: Create a new named competency as a cluster of Core Behaviours
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /competencies
+  statusCodes:
+    - "201"
+    - "409"
+---
+Issued by: **Talentlytica (platform curator)**
+
+Competencies group Core Behaviours under a human-readable label (e.g., "Leadership" = [CB_assertiveness, CB_influence, CB_decisiveness]). Each competency must reference at least one Core Behaviour defined in CoreBehaviourService.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field             | Type     | Notes                                              |
+|-------------------|----------|----------------------------------------------------|
+| competencyId      | uuid     | Caller-supplied idempotency key                    |
+| name              | string   | Human-readable competency name                     |
+| coreBehaviourIds  | uuid[]   | 1..N Core Behaviours that form this competency     |
+| description       | string?  | Optional narrative description                     |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DefineCompetency",
+  "type": "object",
+  "required": ["competencyId", "name", "coreBehaviourIds"],
+  "properties": {
+    "competencyId":     { "type": "string", "format": "uuid" },
+    "name":             { "type": "string" },
+    "coreBehaviourIds": { "type": "array", "items": { "type": "string", "format": "uuid" }, "minItems": 1 },
+    "description":      { "type": "string" }
+  }
+}
+```
+
+<NodeGraph />

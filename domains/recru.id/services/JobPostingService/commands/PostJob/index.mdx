@@ -1,0 +1,32 @@
+---
+id: PostJob
+name: Post Job
+version: 1.0.0
+summary: Create and publish a job opening — must reference a posisi.recru.id positionId
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /jobs
+---
+Issued by: **Recruiter**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| tenantId | string | |
+| positionId | uuid | posisi.recru.id reference |
+| title | string | Display title |
+| closesAt | datetime? | |
+
+<NodeGraph />

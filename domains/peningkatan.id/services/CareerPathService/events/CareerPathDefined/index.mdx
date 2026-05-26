@@ -1,0 +1,26 @@
+---
+id: CareerPathDefined
+name: CareerPathDefined
+version: 1.0.0
+summary: A career progression path has been mapped for a talent
+owners:
+  - product
+---
+A career progression path has been mapped for a talent.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| pathId | uuid | |
+| talentId | uuid | |
+| milestones | positionId[] | Ordered intermediate positions from posisi.recru.id |
+| definedAt | datetime | |

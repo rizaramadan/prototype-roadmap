@@ -1,0 +1,41 @@
+---
+id: ReassessmentInitiated
+name: ReassessmentInitiated
+version: 1.0.0
+summary: Person chose to reuse previous intake data — new assessment is linked to the prior profile
+owners:
+  - platform
+---
+Emitted when a returning person opts into the "use previous data" path during intake. The new assessment inherits intake answers from the referenced prior assessment, skipping the intake form entirely.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field                | Type     | Notes                                          |
+|----------------------|----------|------------------------------------------------|
+| assessmentId         | uuid     | New assessment being started                   |
+| previousAssessmentId | uuid     | Source assessment whose intake data is reused  |
+| personId             | uuid     | bakat.id person identifier                     |
+| initiatedAt          | datetime | ISO 8601                                       |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReassessmentInitiated",
+  "type": "object",
+  "required": ["assessmentId", "previousAssessmentId", "personId", "initiatedAt"],
+  "properties": {
+    "assessmentId":         { "type": "string", "format": "uuid" },
+    "previousAssessmentId": { "type": "string", "format": "uuid" },
+    "personId":             { "type": "string", "format": "uuid" },
+    "initiatedAt":          { "type": "string", "format": "date-time" }
+  }
+}
+```

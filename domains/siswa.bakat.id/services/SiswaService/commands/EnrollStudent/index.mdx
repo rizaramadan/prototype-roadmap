@@ -1,0 +1,52 @@
+---
+id: EnrollStudent
+name: Enroll Student
+version: 1.0.0
+summary: Register a person as a student at an educational institution on siswa.bakat.id
+owners:
+  - product
+
+operation:
+  method: POST
+  path: /students
+  statusCodes:
+    - "201"
+    - "409"
+---
+Issued by: **institution partner (via partner API)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field         | Type   | Notes                                        |
+|---------------|--------|----------------------------------------------|
+| personId      | uuid   | bakat.id person being enrolled               |
+| studentId     | string | Institution-assigned student ID              |
+| institutionId | uuid   | Enrolling institution                        |
+| programId     | uuid   | Degree or certificate program                |
+| enrolledAt    | datetime | ISO 8601                                   |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EnrollStudent",
+  "type": "object",
+  "required": ["personId", "studentId", "institutionId", "programId", "enrolledAt"],
+  "properties": {
+    "personId":      { "type": "string", "format": "uuid" },
+    "studentId":     { "type": "string" },
+    "institutionId": { "type": "string", "format": "uuid" },
+    "programId":     { "type": "string", "format": "uuid" },
+    "enrolledAt":    { "type": "string", "format": "date-time" }
+  }
+}
+```
+
+<NodeGraph />

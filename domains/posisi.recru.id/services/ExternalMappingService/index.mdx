@@ -1,0 +1,17 @@
+---
+id: ExternalMappingService
+name: ExternalMappingService
+version: 1.0.0
+summary: Maintains mappings to O*NET and SkillsFuture — read-only reference
+owners:
+  - platform
+sends:
+  - id: ExternalTaxonomyMapped
+    to:
+      - id: eventstore.position_ontology
+receives:
+  - id: MapExternalTaxonomy
+---
+Maintains mappings to O*NET and SkillsFuture — read-only reference.
+
+<NodeGraph />

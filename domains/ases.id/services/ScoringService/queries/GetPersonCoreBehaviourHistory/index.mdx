@@ -1,0 +1,47 @@
+---
+id: GetPersonCoreBehaviourHistory
+name: Get Person Core Behaviour History
+version: 1.0.0
+summary: All historical Core Behaviour measurements for a person, ordered by date
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/persons/{hashedNationalId}/core-behaviour-history"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** Platform with active ConsentGranted or bakat.id
+
+**Returns:** Array of Core Behaviour score snapshots with timestamps
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Served from the `person_cb_history` projection table — one row per (person, coreBehaviour, assessment) triple, built from `PersonCoreBehaviourProfileUpdated` events.
+
+```sql
+CREATE TABLE person_cb_history (
+  id                UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  person_id         UUID        NOT NULL,
+  core_behaviour_id UUID        NOT NULL,
+  assessment_id     UUID        NOT NULL,
+  score             NUMERIC(4,3) NOT NULL,
+  scored_at         TIMESTAMPTZ NOT NULL,
+  tenant_id         VARCHAR     NOT NULL,
+  INDEX (person_id, core_behaviour_id, scored_at DESC)
+);
+```
+
+<NodeGraph />

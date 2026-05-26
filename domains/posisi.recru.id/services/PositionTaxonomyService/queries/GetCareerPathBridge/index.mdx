@@ -1,0 +1,48 @@
+---
+id: GetCareerPathBridge
+name: Get Career Path Bridge
+version: 1.0.0
+summary: Core Behaviour delta between two positions — what must be developed to move from Position A to Position B
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/positions/bridge?from={positionId}&to={positionId}"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** peningkatan.id
+
+**Returns:** `fromPositionId`, `toPositionId`, `gaps: map<behaviourId, float>`
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Computed on-the-fly by joining the `positions` projection table against itself on `(fromPositionId, toPositionId)`. No separate materialized view — gap deltas are derived at query time from Core Behaviour weight differences.
+
+```sql
+-- Base table queried for both positions
+CREATE TABLE positions (
+  position_id               UUID         PRIMARY KEY,
+  title                     VARCHAR      NOT NULL,
+  level                     VARCHAR      NOT NULL,
+  core_behaviour_requirements JSONB      NOT NULL,
+  updated_at                TIMESTAMPTZ NOT NULL,
+  INDEX (title)
+);
+```
+
+**Gap computation:** `delta[cb] = positions_to.requirements[cb].minScore - positions_from.requirements[cb].minScore`. Positive delta = upskill needed. Negative delta = existing strength.
+
+<NodeGraph />

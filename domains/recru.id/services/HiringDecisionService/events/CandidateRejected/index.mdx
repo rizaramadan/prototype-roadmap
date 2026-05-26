@@ -1,0 +1,26 @@
+---
+id: CandidateRejected
+name: CandidateRejected
+version: 1.0.0
+summary: A candidate has been rejected from a job opening
+owners:
+  - product
+---
+A candidate has been rejected from a job opening.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| applicationId | uuid | |
+| candidateId | uuid | |
+| rejectedAt | datetime | |
+| stage | string | Stage at which rejection occurred |

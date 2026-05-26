@@ -1,0 +1,50 @@
+---
+id: GetVisMap
+name: Get Vis Map
+version: 1.0.0
+summary: Retrieve the most recent visual Core Behaviour gap map for a person against a target position
+owners:
+  - product
+
+operation:
+  method: GET
+  path: "/vismaps/{personId}"
+  statusCodes:
+    - "200"
+    - "404"
+    - "202"
+---
+**Authorized caller:** Any authorized peningkatan.id client with active consent
+
+**Returns:** The latest `VisMapGenerated` snapshot for the (personId, positionId) pair. Returns `202 Accepted` if computation is still in progress.
+
+**Query parameters:** `positionId` (required), `tenantId` (required)
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Served from the `vismaps` projection table — a materialized view of the latest `VisMapGenerated` event per `(personId, positionId, tenantId)` tuple.
+
+```sql
+CREATE TABLE vismaps (
+  id               UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  person_id        UUID        NOT NULL,
+  position_id      UUID        NOT NULL,
+  tenant_id        VARCHAR     NOT NULL,
+  overall_gap_score NUMERIC(4,3) NOT NULL,
+  gaps             JSONB       NOT NULL,
+  generated_at     TIMESTAMPTZ NOT NULL,
+  UNIQUE (person_id, position_id, tenant_id)
+);
+```
+
+<NodeGraph />

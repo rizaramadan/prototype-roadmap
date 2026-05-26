@@ -1,0 +1,30 @@
+---
+id: CandidateHired
+name: CandidateHired
+version: 1.0.0
+summary: A candidate is confirmed as hired — primary handoff event to peningkatan.id
+owners:
+  - product
+---
+A candidate is confirmed as hired — primary handoff event to peningkatan.id.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| applicationId | uuid | |
+| candidateId | uuid | |
+| hashedNationalId | string | Cross-domain linking key for peningkatan.id and bakat.id |
+| jobId | uuid | |
+| positionId | uuid | posisi.recru.id reference — carried to peningkatan.id |
+| tenantId | string | |
+| hiredAt | datetime | |
+| startDate | date? | |

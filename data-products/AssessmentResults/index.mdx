@@ -1,0 +1,57 @@
+---
+id: assessment-results
+name: Assessment Results
+version: 1.0.0
+summary: Scored Core Behaviour profiles from completed assessments — the primary output of ases.id
+owners:
+  - platform
+badges:
+  - content: Core Product
+    backgroundColor: blue
+    textColor: blue
+  - content: ases.id
+    backgroundColor: teal
+    textColor: teal
+inputs:
+  - id: AssessmentCompleted
+  - id: PersonCoreBehaviourProfileUpdated
+  - id: ScoringService
+outputs:
+  - id: eventstore.assessments
+---
+
+## Overview
+
+The Assessment Results data product is the canonical scored output of the ases.id measurement engine. It represents the transformation of raw assessment responses into structured Core Behaviour scores and fit metrics.
+
+Consumers (recru.id, peningkatan.id) gate access via the bakat.id consent model — a person must have active `ConsentGranted` before their assessment result can be read cross-domain.
+
+<NodeGraph />
+
+## Output Schema
+
+```json
+{
+  "assessmentId": "uuid",
+  "personId": "uuid",
+  "tenantId": "string",
+  "positionId": "uuid | null",
+  "coreBehaviourScores": [
+    { "coreBehaviourId": "uuid", "score": "number (0–1)", "percentile": "number" }
+  ],
+  "fitScore": "number (0–1) | null",
+  "scoredAt": "ISO 8601 datetime"
+}
+```
+
+## Access model
+
+| Consumer         | Access condition                                        |
+|------------------|---------------------------------------------------------|
+| recru.id         | Same-tenant OR person has active ConsentGranted         |
+| peningkatan.id   | Same-tenant OR person has active ConsentGranted         |
+| bakat.id         | Always — it owns the person's canonical profile         |
+
+## Freshness
+
+Updated within seconds of `AssessmentCompleted` via the ScoringService event handler.

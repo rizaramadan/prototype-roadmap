@@ -1,0 +1,102 @@
+---
+id: Candidate
+name: Candidate
+version: 1.0.0
+summary: A person's journey through a specific job's hiring funnel
+aggregateRoot: true
+identifier: candidateId
+owners:
+  - product
+badges:
+  - content: Aggregate Root
+    backgroundColor: blue
+    textColor: blue
+  - content: recru.id
+    backgroundColor: orange
+    textColor: orange
+properties:
+  - name: candidateId
+    type: uuid
+    required: true
+    description: Unique identifier
+  - name: personId
+    type: uuid
+    required: true
+    description: bakat.id person applying
+    references: Person
+    referencesIdentifier: personId
+    relationType: one-to-one
+  - name: jobId
+    type: uuid
+    required: true
+    description: Job the candidate applied for
+    references: Job
+    referencesIdentifier: jobId
+    relationType: one-to-one
+  - name: tenantId
+    type: string
+    required: true
+    description: Hiring organization
+  - name: stage
+    type: enum
+    required: true
+    description: "applied | screening | assessment | interview | offer | hired | rejected"
+  - name: assessmentId
+    type: uuid
+    required: false
+    description: ases.id assessment assigned to this candidate
+    references: Assessment
+    referencesIdentifier: assessmentId
+    relationType: one-to-one
+  - name: fitScore
+    type: number
+    required: false
+    description: Computed Core Behaviour fit score (0.0–1.0) — written by ScoringService
+  - name: appliedAt
+    type: datetime
+    required: true
+    description: When the application was received
+  - name: atsSource
+    type: string
+    required: false
+    description: External ATS identifier if synced via ATSBridgeService
+  - name: atsId
+    type: string
+    required: false
+    description: Candidate ID in the external ATS
+---
+
+## State Machine
+
+```
+applied → screening (recruiter reviews)
+screening → assessment (assessment delegated)
+assessment → interview (assessment completed + passed threshold)
+assessment → rejected (below threshold)
+interview → offer
+offer → hired
+offer → rejected
+any non-terminal → rejected (CandidateRejected command)
+```
+
+## Invariants
+
+- `(personId, jobId)` pair is unique — a person can apply once per job
+- `stage` is monotonic — it cannot move backward
+- `fitScore` is immutable once written by ScoringService
+- `assessmentId` may only be set by AssessmentDelegationService
+
+## Commands
+
+| Command               | Guard                                                  |
+|-----------------------|--------------------------------------------------------|
+| AdvanceCandidateStage | targetStage must be forward in the state machine       |
+| RecordHiringDecision  | candidateId must be in `interview` or `offer` stage    |
+
+## Events emitted
+
+| Event              | Trigger               |
+|--------------------|-----------------------|
+| CandidateApplied   | (application intake)  |
+| CandidateHired     | RecordHiringDecision hired=true   |
+| CandidateRejected  | RecordHiringDecision hired=false  |

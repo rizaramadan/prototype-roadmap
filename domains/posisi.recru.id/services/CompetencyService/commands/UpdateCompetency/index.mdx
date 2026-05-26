@@ -1,0 +1,52 @@
+---
+id: UpdateCompetency
+name: Update Competency
+version: 1.0.0
+summary: Add or remove Core Behaviours from an existing competency, or rename it
+owners:
+  - platform
+
+operation:
+  method: PATCH
+  path: "/competencies/{competencyId}"
+  statusCodes:
+    - "200"
+    - "404"
+---
+Issued by: **Talentlytica (platform curator)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field                   | Type    | Notes                                              |
+|-------------------------|---------|----------------------------------------------------|
+| competencyId            | uuid    | Competency to update                               |
+| name                    | string? | New name if renaming                               |
+| addCoreBehaviourIds     | uuid[]? | Core Behaviours to add                             |
+| removeCoreBehaviourIds  | uuid[]? | Core Behaviours to remove                          |
+| description             | string? | New description if updating                        |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UpdateCompetency",
+  "type": "object",
+  "required": ["competencyId"],
+  "properties": {
+    "competencyId":           { "type": "string", "format": "uuid" },
+    "name":                   { "type": "string" },
+    "addCoreBehaviourIds":    { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "removeCoreBehaviourIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "description":            { "type": "string" }
+  }
+}
+```
+
+<NodeGraph />

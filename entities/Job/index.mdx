@@ -1,0 +1,82 @@
+---
+id: Job
+name: Job
+version: 1.0.0
+summary: An open vacancy at a specific tenant — the bridge between a Position and active hiring
+aggregateRoot: true
+identifier: jobId
+owners:
+  - product
+badges:
+  - content: Aggregate Root
+    backgroundColor: blue
+    textColor: blue
+  - content: recru.id
+    backgroundColor: orange
+    textColor: orange
+properties:
+  - name: jobId
+    type: uuid
+    required: true
+    description: Unique identifier
+  - name: positionId
+    type: uuid
+    required: true
+    description: posisi.recru.id position this vacancy is hiring for
+    references: Position
+    referencesIdentifier: positionId
+    relationType: one-to-one
+  - name: tenantId
+    type: string
+    required: true
+    description: Organization posting the vacancy
+  - name: title
+    type: string
+    required: true
+    description: Displayed job title (may differ from Position.title for branding reasons)
+  - name: status
+    type: enum
+    required: true
+    description: "draft | open | paused | closed | filled"
+  - name: assessmentConfigId
+    type: uuid
+    required: false
+    description: Assessment battery used for candidates — may override Position default
+  - name: postedAt
+    type: datetime
+    required: false
+    description: When the job became visible to candidates
+  - name: closedAt
+    type: datetime
+    required: false
+    description: When the vacancy was closed or filled
+---
+
+## State Machine
+
+```
+draft → open (PostJob command)
+open → paused (manual pause)
+paused → open (resume)
+open → filled (CandidateHired event closes the job)
+open → closed (manual close without hire)
+```
+
+## Invariants
+
+- `positionId` is immutable after creation
+- `tenantId` is immutable after creation
+- A Job can only have one active `CandidateHired` event — filling the job auto-closes it
+- `assessmentConfigId` override must be a subset of the Position's required Core Behaviours
+
+## Commands
+
+| Command  | Guard                          |
+|----------|--------------------------------|
+| PostJob  | positionId must exist          |
+
+## Events emitted
+
+| Event      | Trigger  |
+|------------|----------|
+| JobPosted  | PostJob  |

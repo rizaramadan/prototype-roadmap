@@ -1,0 +1,31 @@
+---
+id: AdvanceCandidateStage
+name: Advance Candidate Stage
+version: 1.0.0
+summary: Move a candidate to the next pipeline stage (screening → assessment → interview → offer)
+owners:
+  - platform
+
+operation:
+  method: PATCH
+  path: "/applications/{applicationId}/stage"
+---
+Issued by: **Recruiter**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| applicationId | uuid | |
+| toStage | enum | screening \| assessment \| interview \| offer \| hired \| rejected |
+| note | string? | Recruiter notes |
+
+<NodeGraph />

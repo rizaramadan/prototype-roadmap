@@ -1,0 +1,34 @@
+---
+id: CreateIntervention
+name: Create Intervention
+version: 1.0.0
+summary: Log a real-world HR improvement action for a talent
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /interventions
+---
+Issued by: **HR Manager**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| talentId | uuid | |
+| tenantId | string | |
+| targetBehaviours | uuid[] | Core Behaviour IDs being addressed |
+| actionType | enum | coaching \| training \| mentoring \| reassignment \| other |
+| description | string | |
+| plannedReassessmentAt | datetime? | |
+
+<NodeGraph />

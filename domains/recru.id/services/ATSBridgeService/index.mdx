@@ -1,0 +1,27 @@
+---
+id: ATSBridgeService
+name: ATSBridgeService
+version: 1.0.0
+summary: Anti-corruption layer for external ATS integrations
+owners:
+  - product
+sends:
+  - id: CandidateSyncedFromATS
+    to:
+      - id: eventstore.recruitment
+  - id: SyncCandidateFromATS
+  - id: PushStatusToATS
+receives:
+  - id: CandidateHired
+    from:
+      - id: eventstore.recruitment
+  - id: CandidateRejected
+    from:
+      - id: eventstore.recruitment
+  - id: AssessmentCompleted
+    from:
+      - id: eventstore.assessments
+---
+Anti-corruption layer for external ATS integrations.
+
+<NodeGraph />

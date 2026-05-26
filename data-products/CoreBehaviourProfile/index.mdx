@@ -1,0 +1,68 @@
+---
+id: core-behaviour-profile
+name: Core Behaviour Profile
+version: 1.0.0
+summary: A person's portable, time-series Core Behaviour profile — the canonical talent fingerprint in bakat.id
+owners:
+  - platform
+  - product
+badges:
+  - content: Portable
+    backgroundColor: purple
+    textColor: purple
+  - content: bakat.id
+    backgroundColor: purple
+    textColor: purple
+  - content: Primary Signal
+    backgroundColor: green
+    textColor: green
+inputs:
+  - id: PersonCoreBehaviourProfileUpdated
+  - id: AssessmentCompleted
+  - id: ScoringService
+  - id: ProfileService
+outputs:
+  - id: eventstore.persons
+---
+
+## Overview
+
+The Core Behaviour Profile is the central data product of the Talentlytica ecosystem. Every scored assessment contributes to this profile. Unlike an ATS resume, it belongs to the **person**, not the employer — and it travels with them across organizations.
+
+**Portability:** When a person joins a new employer, they authorize that employer (via `GrantConsent`) to read their profile. The profile is never copied — cross-tenant reads go through bakat.id's consent-gated API.
+
+**Longitudinal:** Each assessment appends a new data point. The profile shows growth, regression, and stability across time and contexts (different roles, different employers).
+
+<NodeGraph />
+
+## Output Schema
+
+```json
+{
+  "personId": "uuid",
+  "coreBehaviourScores": [
+    {
+      "coreBehaviourId": "uuid",
+      "latestScore": "number (0–1)",
+      "percentile": "number",
+      "history": [
+        { "assessmentId": "uuid", "score": "number", "scoredAt": "ISO 8601 datetime", "tenantId": "string" }
+      ]
+    }
+  ],
+  "lastUpdatedAt": "ISO 8601 datetime",
+  "assessmentCount": "integer"
+}
+```
+
+## Consent gates
+
+| Operation      | Condition                                     |
+|----------------|-----------------------------------------------|
+| Read (same tenant) | Always allowed                            |
+| Read (cross-tenant) | Active `ConsentGranted` required          |
+| Write          | Only ScoringService via internal event        |
+
+## Freshness
+
+Updated within seconds of every `AssessmentCompleted` event via `PersonCoreBehaviourProfileUpdated`.

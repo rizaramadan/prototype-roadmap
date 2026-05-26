@@ -1,0 +1,28 @@
+---
+id: AssessmentAssigned
+name: Assessment Assigned
+version: 1.0.0
+summary: An assessment has been assigned to a person
+owners:
+  - platform
+---
+An assessment has been assigned to a person.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentId | uuid | |
+| personId | uuid? | bakat.id person ID if linked, else null |
+| hashedNationalId | string? | If available |
+| assignedBy | string | Requesting platform identifier |
+| positionId | uuid? | posisi.recru.id position reference for recruitment context |
+| assignedAt | datetime | |

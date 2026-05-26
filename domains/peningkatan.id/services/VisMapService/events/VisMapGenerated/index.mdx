@@ -1,0 +1,63 @@
+---
+id: VisMapGenerated
+name: VisMapGenerated
+version: 1.0.0
+summary: A visual Core Behaviour gap map has been computed for a person against a target position
+owners:
+  - product
+badges:
+  - content: Primary Signal
+    backgroundColor: green
+    textColor: green
+---
+Emitted when a vis map computation completes. Contains the overall gap score and per-Core-Behaviour deltas. IDPService consumes this event to recommend targeted interventions.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field           | Type     | Notes                                                      |
+|-----------------|----------|------------------------------------------------------------|
+| visMapId        | uuid     | Unique identifier for this map snapshot                    |
+| personId        | uuid     | bakat.id person                                            |
+| positionId      | uuid     | Target position                                            |
+| tenantId        | string   | Requesting organization                                    |
+| overallGapScore | number   | 0.0 (perfect fit) – 1.0 (maximum gap)                     |
+| gaps            | object[] | Per-Core-Behaviour gap: `{ coreBehaviourId, required, actual, delta }` |
+| generatedAt     | datetime | ISO 8601                                                   |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VisMapGenerated",
+  "type": "object",
+  "required": ["visMapId", "personId", "positionId", "tenantId", "overallGapScore", "gaps", "generatedAt"],
+  "properties": {
+    "visMapId":        { "type": "string", "format": "uuid" },
+    "personId":        { "type": "string", "format": "uuid" },
+    "positionId":      { "type": "string", "format": "uuid" },
+    "tenantId":        { "type": "string" },
+    "overallGapScore": { "type": "number", "minimum": 0, "maximum": 1 },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["coreBehaviourId", "required", "actual", "delta"],
+        "properties": {
+          "coreBehaviourId": { "type": "string", "format": "uuid" },
+          "required":        { "type": "number" },
+          "actual":          { "type": "number" },
+          "delta":           { "type": "number" }
+        }
+      }
+    },
+    "generatedAt": { "type": "string", "format": "date-time" }
+  }
+}
+```

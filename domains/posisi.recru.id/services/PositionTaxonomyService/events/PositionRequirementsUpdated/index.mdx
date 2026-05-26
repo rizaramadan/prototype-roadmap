@@ -1,0 +1,27 @@
+---
+id: PositionRequirementsUpdated
+name: PositionRequirementsUpdated
+version: 1.0.0
+summary: Core Behaviour weights for an existing position have changed — triggers fit score recalculation downstream
+owners:
+  - platform
+---
+Core Behaviour weights for an existing position have changed — triggers fit score recalculation downstream.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| positionId | uuid | |
+| previousWeights | map\<behaviourId, float\> | For audit trail |
+| newWeights | map\<behaviourId, float\> | |
+| reason | string? | |
+| updatedAt | datetime | |

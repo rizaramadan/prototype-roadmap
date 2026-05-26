@@ -1,0 +1,31 @@
+---
+id: UpdatePositionRequirements
+name: Update Position Requirements
+version: 1.0.0
+summary: Revise Core Behaviour weights for an existing position — triggers fit score recalculation downstream
+owners:
+  - platform
+
+operation:
+  method: PATCH
+  path: "/positions/{positionId}/requirements"
+---
+Issued by: **Talentlytica content team**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| positionId | uuid | |
+| coreBehaviourWeights | map\<behaviourId, float\> | New weights |
+| reason | string? | |
+
+<NodeGraph />

@@ -1,0 +1,26 @@
+---
+id: PersonRegistered
+name: PersonRegistered
+version: 1.0.0
+summary: A new person has created their bakat.id profile
+owners:
+  - product
+---
+A new person has created their bakat.id profile.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| personId | uuid | Internal bakat.id identifier |
+| hashedNationalId | string | Cross-domain linking key |
+| registeredAt | datetime | ISO 8601 |
+| source | enum | www \| siswa \| beasiswa \| recru_intake \| ases_intake |

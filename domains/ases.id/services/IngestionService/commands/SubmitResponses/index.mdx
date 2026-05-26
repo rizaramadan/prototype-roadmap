@@ -1,0 +1,27 @@
+---
+id: SubmitResponses
+name: Submit Responses
+version: 1.0.0
+summary: Person submits completed assessment responses
+owners:
+  - platform
+---
+Issued by: **person (self)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentId | uuid | |
+| responses | object[] | Array of question/answer pairs |
+| submittedAt | datetime | |
+
+<NodeGraph />

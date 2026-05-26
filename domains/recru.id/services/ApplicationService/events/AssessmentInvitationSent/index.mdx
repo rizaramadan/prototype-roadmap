@@ -1,0 +1,27 @@
+---
+id: AssessmentInvitationSent
+name: AssessmentInvitationSent
+version: 1.0.0
+summary: recru.id has requested ases.id to assign an assessment to a candidate
+owners:
+  - product
+---
+recru.id has requested ases.id to assign an assessment to a candidate.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| applicationId | uuid | |
+| assessmentId | uuid | Returned by ases.id after AssignAssessment |
+| candidateId | uuid | |
+| positionId | uuid | posisi.recru.id reference for fit scoring context |
+| sentAt | datetime | |

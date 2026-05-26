@@ -1,0 +1,24 @@
+---
+id: CompetencyService
+name: CompetencyService
+version: 1.0.0
+summary: Manages competency definitions as named clusters of Core Behaviours
+owners:
+  - platform
+sends:
+  - id: CompetencyDefined
+    to:
+      - id: eventstore.position_ontology
+  - id: CompetencyUpdated
+    to:
+      - id: eventstore.position_ontology
+receives:
+  - id: DefineCompetency
+  - id: UpdateCompetency
+  - id: CoreBehaviourDefined
+    from:
+      - id: eventstore.position_ontology
+---
+Manages competency definitions as named clusters of Core Behaviours.
+
+<NodeGraph />

@@ -1,0 +1,28 @@
+---
+id: SuccessionCandidateNominated
+name: SuccessionCandidateNominated
+version: 1.0.0
+summary: A talent has been identified as a succession candidate for a key position
+owners:
+  - product
+---
+A talent has been identified as a succession candidate for a key position.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| nominationId | uuid | |
+| talentId | uuid | |
+| targetPositionId | uuid | The key position being succession-planned |
+| readinessScore | float | 0–1, computed from Core Behaviour fit |
+| readinessLevel | enum | ready_now \| ready_1_year \| ready_3_years |
+| nominatedAt | datetime | |

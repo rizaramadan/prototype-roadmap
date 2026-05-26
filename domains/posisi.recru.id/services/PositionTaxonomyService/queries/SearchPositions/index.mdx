@@ -1,0 +1,51 @@
+---
+id: SearchPositions
+name: Search Positions
+version: 1.0.0
+summary: Find positions matching a title or Core Behaviour cluster filter
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/positions?q={query}"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** Any platform
+
+**Returns:** Array of matching position summaries
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Full-text search on the `positions` table title column + optional Core Behaviour filter on the `core_behaviour_requirements` JSONB field.
+
+```sql
+CREATE TABLE positions (
+  position_id               UUID         PRIMARY KEY,
+  title                     VARCHAR      NOT NULL,
+  level                     VARCHAR      NOT NULL,
+  core_behaviour_requirements JSONB      NOT NULL,
+  updated_at                TIMESTAMPTZ NOT NULL,
+  INDEX (title),
+  FULLTEXT INDEX (title)
+);
+```
+
+**Query parameters:**
+- `q` — full-text search on position title
+- `coreBehaviourId[]` — filter to positions that require specific Core Behaviours
+- `level` — filter by seniority level
+
+<NodeGraph />

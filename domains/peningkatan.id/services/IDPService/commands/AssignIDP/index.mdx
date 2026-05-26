@@ -1,0 +1,31 @@
+---
+id: AssignIDP
+name: Assign IDP
+version: 1.0.0
+summary: Create and assign an Individual Development Plan to a talent
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /idps
+---
+Issued by: **HR Manager**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| talentId | uuid | |
+| currentPositionId | uuid | posisi.recru.id reference |
+| targetPositionId | uuid | posisi.recru.id reference |
+
+<NodeGraph />

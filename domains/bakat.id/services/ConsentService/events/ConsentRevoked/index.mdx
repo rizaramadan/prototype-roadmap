@@ -1,0 +1,25 @@
+---
+id: ConsentRevoked
+name: ConsentRevoked
+version: 1.0.0
+summary: Person has revoked a previously granted consent
+owners:
+  - product
+---
+Person has revoked a previously granted consent.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| personId | uuid | |
+| revokedFrom | string | Platform identifier |
+| revokedAt | datetime | |

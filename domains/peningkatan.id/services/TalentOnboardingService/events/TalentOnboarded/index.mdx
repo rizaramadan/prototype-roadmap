@@ -1,0 +1,29 @@
+---
+id: TalentOnboarded
+name: TalentOnboarded
+version: 1.0.0
+summary: A new talent has been onboarded into a client's peningkatan.id tenant
+owners:
+  - product
+---
+A new talent has been onboarded into a client's peningkatan.id tenant.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| talentId | uuid | Tenant-scoped identifier |
+| personId | uuid | bakat.id person reference |
+| hashedNationalId | string | |
+| tenantId | string | |
+| positionId | uuid | posisi.recru.id position reference |
+| onboardedAt | datetime | |
+| source | enum | recru_hired \| direct_import |

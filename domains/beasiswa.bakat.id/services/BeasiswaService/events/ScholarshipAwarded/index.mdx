@@ -1,0 +1,26 @@
+---
+id: ScholarshipAwarded
+name: ScholarshipAwarded
+version: 1.0.0
+summary: A scholarship has been granted to a student
+owners:
+  - product
+---
+A scholarship has been granted to a student.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| personId | uuid | |
+| scholarshipId | uuid | |
+| awardedBy | string | Institution identifier |
+| awardedAt | datetime | |

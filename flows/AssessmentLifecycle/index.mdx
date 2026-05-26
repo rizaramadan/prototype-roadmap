@@ -1,0 +1,99 @@
+---
+id: AssessmentLifecycle
+name: Assessment Lifecycle
+version: 1.0.0
+summary: End-to-end flow from assessment assignment through scoring and Core Behaviour profile update
+owners:
+  - platform
+steps:
+  - id: platform_actor
+    title: Platform
+    summary: Requesting platform — recru.id, peningkatan.id, or external ATS
+    actor:
+      name: Platform
+    next_step:
+      id: assign_assessment
+      label: Request assessment
+
+  - id: assign_assessment
+    title: Assign Assessment
+    message:
+      id: AssignAssessment
+      version: 1.0.0
+    next_step:
+      id: ingestion_service
+      label: Received by IngestionService
+
+  - id: ingestion_service
+    title: Ingestion Service
+    service:
+      id: IngestionService
+      version: 1.0.0
+    next_step:
+      id: assessment_assigned
+      label: Publishes
+
+  - id: assessment_assigned
+    title: Assessment Assigned
+    message:
+      id: AssessmentAssigned
+      version: 1.0.0
+    next_step:
+      id: person_actor
+      label: Invitation sent to person
+
+  - id: person_actor
+    title: Person
+    summary: Candidate or talent receiving the assessment invitation
+    actor:
+      name: Person
+    next_step:
+      id: assessment_started
+      label: Begins assessment
+
+  - id: assessment_started
+    title: Assessment Started
+    message:
+      id: AssessmentStarted
+      version: 1.0.0
+    next_step:
+      id: submit_responses
+      label: Person submits
+
+  - id: submit_responses
+    title: Submit Responses
+    message:
+      id: SubmitResponses
+      version: 1.0.0
+    next_step:
+      id: scoring_service
+      label: Received by ScoringService
+
+  - id: scoring_service
+    title: Scoring Service
+    service:
+      id: ScoringService
+      version: 1.0.0
+    next_steps:
+      - id: assessment_completed
+        label: Publishes
+      - id: core_behaviour_updated
+        label: Publishes
+
+  - id: assessment_completed
+    title: Assessment Completed
+    message:
+      id: AssessmentCompleted
+      version: 1.0.0
+
+  - id: core_behaviour_updated
+    title: Person Core Behaviour Profile Updated
+    message:
+      id: PersonCoreBehaviourProfileUpdated
+      version: 1.0.0
+---
+
+Core assessment flow from assignment to scoring. Triggered by any platform that holds a tenant credential.
+After `PersonCoreBehaviourProfileUpdated` fires, downstream domains (recru.id, peningkatan.id, bakat.id) react independently.
+
+<NodeGraph />

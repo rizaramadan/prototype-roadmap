@@ -1,0 +1,44 @@
+---
+id: eventstore.position_ontology
+name: eventstore → position_ontology
+version: 1.0.0
+summary: Core Behaviour ontology events — behaviours, positions, competencies defined or updated
+owners:
+  - riza
+  - platform
+address: eventstore.position_ontology
+protocols:
+  - postgresql
+---
+
+PostgreSQL table `position_ontology` in the `eventstore` database. Owned by the `posisi.recru.id` domain.
+
+<ChannelInformation />
+
+## Table Schema
+
+```sql
+CREATE TABLE position_ontology (
+  id             UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  aggregate_id   UUID        NOT NULL,
+  event_type     VARCHAR     NOT NULL,
+  event_version  VARCHAR     NOT NULL,
+  payload        JSONB       NOT NULL,
+  occurred_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  tenant_id      VARCHAR,
+  trace_id       UUID,
+  correlation_id UUID,
+  causation_id   UUID,
+  INDEX (aggregate_id),
+  INDEX (event_type),
+  INDEX (occurred_at),
+  INDEX (trace_id)
+);
+```
+
+## Event types in this table
+
+- `CoreBehaviourDefined`
+- `PositionCreated`
+- `PositionRequirementsUpdated`
+- `CompetencyDefined`

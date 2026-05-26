@@ -1,0 +1,27 @@
+---
+id: MapExternalTaxonomy
+name: Map External Taxonomy
+version: 1.0.0
+summary: Import and map an external taxonomy entry (O*NET, SkillsFuture) to an existing posisi position
+owners:
+  - platform
+---
+Issued by: **Talentlytica (scheduled)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| positionId | uuid | |
+| source | enum | onet \| skillsfuture |
+| externalCode | string | External framework code |
+
+<NodeGraph />

@@ -1,0 +1,50 @@
+---
+id: GenerateVisMap
+name: Generate Vis Map
+version: 1.0.0
+summary: Trigger generation of a visual Core Behaviour gap map for a person against a target position
+owners:
+  - product
+
+operation:
+  method: POST
+  path: /vismaps
+  statusCodes:
+    - "202"
+    - "404"
+---
+Issued by: **peningkatan.id front-end (via API Gateway)**
+
+Computes the delta between a person's current Core Behaviour profile and the requirements of a target position. The response is async — the caller polls `GetVisMap` or waits for `VisMapGenerated`.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field      | Type   | Notes                              |
+|------------|--------|------------------------------------|
+| personId   | uuid   | bakat.id person identifier         |
+| positionId | uuid   | Target position in posisi.recru.id |
+| tenantId   | string | Requesting organization            |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GenerateVisMap",
+  "type": "object",
+  "required": ["personId", "positionId", "tenantId"],
+  "properties": {
+    "personId":   { "type": "string", "format": "uuid" },
+    "positionId": { "type": "string", "format": "uuid" },
+    "tenantId":   { "type": "string" }
+  }
+}
+```
+
+<NodeGraph />

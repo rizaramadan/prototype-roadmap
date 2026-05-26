@@ -1,0 +1,25 @@
+---
+id: AssessmentStarted
+name: Assessment Started
+version: 1.0.0
+summary: The person has begun the assessment session
+owners:
+  - platform
+---
+The person has begun the assessment session.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentId | uuid | |
+| personId | uuid? | |
+| startedAt | datetime | |

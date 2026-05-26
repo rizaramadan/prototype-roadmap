@@ -1,0 +1,27 @@
+---
+id: AssessmentResultRetained
+name: AssessmentResultRetained
+version: 1.0.0
+summary: An assessment result from ases.id has been retained into the person's portable profile
+owners:
+  - product
+---
+An assessment result from ases.id has been retained into the person's portable profile.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| personId | uuid | |
+| assessmentId | uuid | Reference to ases.id assessment |
+| retainedData | object | Portable subset (Core Behaviour scores) |
+| sourceTenant | string | Client tenant where assessment was done |
+| retainedAt | datetime | |

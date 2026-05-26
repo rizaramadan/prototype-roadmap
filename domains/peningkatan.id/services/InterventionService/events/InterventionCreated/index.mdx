@@ -1,0 +1,30 @@
+---
+id: InterventionCreated
+name: InterventionCreated
+version: 1.0.0
+summary: An HR manager has logged a real-world improvement action for a talent
+owners:
+  - product
+---
+An HR manager has logged a real-world improvement action for a talent.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| interventionId | uuid | |
+| talentId | uuid | |
+| tenantId | string | |
+| targetBehaviours | uuid[] | Core Behaviour IDs being addressed |
+| actionType | enum | coaching \| training \| mentoring \| reassignment \| other |
+| description | string | HR manager's notes |
+| plannedReassessmentAt | datetime? | When to re-measure progress |
+| createdAt | datetime | |

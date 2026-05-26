@@ -1,0 +1,17 @@
+---
+id: IngestionService
+name: Ingestion Service
+version: 1.0.0
+summary: Receives, validates, and stores assessment responses
+owners:
+  - platform
+sends:
+  - id: AssessmentAssigned
+  - id: AssessmentStarted
+receives:
+  - id: AssignAssessment
+  - id: SubmitResponses
+---
+Receives, validates, and stores assessment responses. Maps raw responses to Core Behaviour dimensions using the posisi.recru.id ontology.
+
+<NodeGraph />

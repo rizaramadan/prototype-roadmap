@@ -1,0 +1,23 @@
+---
+id: VisMapService
+name: VisMapService
+version: 1.0.0
+summary: Visualizes a talent's Core Behaviour profile against their current and target position requirements
+owners:
+  - product
+sends:
+  - id: VisMapGenerated
+    to:
+      - id: eventstore.talent_development
+receives:
+  - id: GenerateVisMap
+  - id: PersonCoreBehaviourProfileUpdated
+    from:
+      - id: eventstore.assessments
+  - id: ConsentGranted
+    from:
+      - id: eventstore.persons
+---
+Visualizes a talent's Core Behaviour profile against their current and target position requirements.
+
+<NodeGraph />

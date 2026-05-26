@@ -1,0 +1,27 @@
+---
+id: PositionCreated
+name: PositionCreated
+version: 1.0.0
+summary: A new position has been defined with its Core Behaviour requirements
+owners:
+  - platform
+---
+A new position has been defined with its Core Behaviour requirements.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| positionId | uuid | |
+| title | string | e.g., "Senior Product Manager" |
+| level | string | junior \| mid \| senior \| lead \| executive |
+| coreBehaviourWeights | map\<behaviourId, float\> | Weight 0–1 per required Core Behaviour |
+| externalMappings | object? | e.g. `onet` and `skillsfuture` codes |

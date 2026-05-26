@@ -1,0 +1,28 @@
+---
+id: CoreBehaviourDefined
+name: CoreBehaviourDefined
+version: 1.0.0
+summary: A new Core Behaviour has been added to the ontology
+owners:
+  - platform
+---
+A new Core Behaviour has been added to the ontology.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| behaviourId | uuid | Stable — never changes once defined |
+| code | string | e.g., CB-042 |
+| name | string | e.g., "Seeks feedback proactively" |
+| description | string | |
+| category | string | Broad grouping |
+| definedAt | datetime | |

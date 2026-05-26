@@ -1,0 +1,46 @@
+---
+id: GetCoreBehavioursByCompetency
+name: Get Core Behaviours By Competency
+version: 1.0.0
+summary: All Core Behaviours that compose a given competency
+owners:
+  - platform
+
+operation:
+  method: GET
+  path: "/competencies/{competencyId}/core-behaviours"
+  statusCodes:
+    - "200"
+    - "404"
+---
+**Authorized caller:** Any platform
+
+**Returns:** Array of Core Behaviour definitions
+
+## Envelope
+
+Carried as HTTP request headers (`X-Trace-Id`, `X-Correlation-Id`, `X-Causation-Id`).
+
+| Field         | Type   | Notes                                                |
+|---------------|--------|------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                  |
+| correlationId | uuid   | Groups related operations across services            |
+| causationId   | uuid?  | ID of the command or event that triggered this query |
+
+## Read Model
+
+Served from the `competency_core_behaviours` projection — a denormalized join rebuilt from `CompetencyDefined` and `CompetencyUpdated` events.
+
+```sql
+CREATE TABLE competency_core_behaviours (
+  competency_id      UUID    NOT NULL,
+  core_behaviour_id  UUID    NOT NULL,
+  competency_name    VARCHAR NOT NULL,
+  cb_name            VARCHAR NOT NULL,
+  cb_description     TEXT,
+  PRIMARY KEY (competency_id, core_behaviour_id),
+  INDEX (competency_id)
+);
+```
+
+<NodeGraph />

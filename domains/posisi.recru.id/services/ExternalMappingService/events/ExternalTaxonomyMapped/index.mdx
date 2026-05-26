@@ -1,0 +1,43 @@
+---
+id: ExternalTaxonomyMapped
+name: ExternalTaxonomyMapped
+version: 1.0.0
+summary: An external taxonomy entry (O*NET / SkillsFuture) has been mapped to a posisi position
+owners:
+  - platform
+---
+Emitted after a scheduled sync successfully creates or updates a mapping between an external framework code and a posisi.recru.id position. Enables cross-framework benchmarking and external reporting.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field        | Type     | Notes                                      |
+|--------------|----------|--------------------------------------------|
+| mappingId    | uuid     | Unique identifier for this mapping record  |
+| positionId   | uuid     | posisi.recru.id position                   |
+| source       | enum     | onet \| skillsfuture                       |
+| externalCode | string   | Code within the external framework         |
+| mappedAt     | datetime | ISO 8601                                   |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ExternalTaxonomyMapped",
+  "type": "object",
+  "required": ["mappingId", "positionId", "source", "externalCode", "mappedAt"],
+  "properties": {
+    "mappingId":    { "type": "string", "format": "uuid" },
+    "positionId":   { "type": "string", "format": "uuid" },
+    "source":       { "type": "string", "enum": ["onet", "skillsfuture"] },
+    "externalCode": { "type": "string" },
+    "mappedAt":     { "type": "string", "format": "date-time" }
+  }
+}
+```

@@ -1,0 +1,31 @@
+---
+id: RegisterPerson
+name: Register Person
+version: 1.0.0
+summary: Create a new bakat.id profile — requires hashed national ID for cross-domain linking
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /persons
+---
+Issued by: **person (self)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| hashedNationalId | string | Cross-domain linking key |
+| email | string | |
+| source | enum | www \| siswa \| beasiswa \| recru_intake \| ases_intake |
+
+<NodeGraph />

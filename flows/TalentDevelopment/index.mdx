@@ -1,0 +1,104 @@
+---
+id: TalentDevelopment
+name: Talent Development
+version: 1.0.0
+summary: Post-hire talent lifecycle — onboarding, IDP, interventions, and succession planning
+owners:
+  - product
+steps:
+  - id: candidate_hired
+    title: Candidate Hired
+    summary: Handoff event from recru.id — triggers peningkatan.id onboarding
+    message:
+      id: CandidateHired
+      version: 1.0.0
+    next_step:
+      id: onboarding_service
+      label: Received by TalentOnboardingService
+
+  - id: onboarding_service
+    title: Talent Onboarding Service
+    service:
+      id: TalentOnboardingService
+      version: 1.0.0
+    next_step:
+      id: talent_onboarded
+      label: Publishes
+
+  - id: talent_onboarded
+    title: Talent Onboarded
+    message:
+      id: TalentOnboarded
+      version: 1.0.0
+    next_step:
+      id: idp_service
+      label: HR assigns development plan
+
+  - id: idp_service
+    title: IDP Service
+    service:
+      id: IDPService
+      version: 1.0.0
+    next_step:
+      id: idp_assigned
+      label: Publishes
+
+  - id: idp_assigned
+    title: IDP Assigned
+    message:
+      id: IDPAssigned
+      version: 1.0.0
+    next_steps:
+      - id: intervention_service
+        label: HR logs improvement action
+      - id: reassessment
+        label: Reassess at scheduled date
+
+  - id: intervention_service
+    title: Intervention Service
+    service:
+      id: InterventionService
+      version: 1.0.0
+    next_step:
+      id: intervention_created
+      label: Publishes
+
+  - id: intervention_created
+    title: Intervention Created
+    message:
+      id: InterventionCreated
+      version: 1.0.0
+    next_step:
+      id: reassessment
+      label: Re-measure progress
+
+  - id: reassessment
+    title: Re-assessment
+    flow:
+      id: AssessmentLifecycle
+      version: 1.0.0
+    next_step:
+      id: succession_service
+      label: Readiness evaluated
+
+  - id: succession_service
+    title: Succession Service
+    service:
+      id: SuccessionService
+      version: 1.0.0
+    next_step:
+      id: succession_nominated
+      label: Publishes
+
+  - id: succession_nominated
+    title: Succession Candidate Nominated
+    message:
+      id: SuccessionCandidateNominated
+      version: 1.0.0
+---
+
+Post-hire talent development flow. Begins when `CandidateHired` arrives from recru.id.
+Re-assessment is a sub-flow referencing `AssessmentLifecycle` — the updated `PersonCoreBehaviourProfileUpdated`
+feeds back into VisMap and fit score recalculation across the ecosystem.
+
+<NodeGraph />

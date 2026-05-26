@@ -1,0 +1,28 @@
+---
+id: IDPAssigned
+name: IDPAssigned
+version: 1.0.0
+summary: An Individual Development Plan has been created and assigned to a talent
+owners:
+  - product
+---
+An Individual Development Plan has been created and assigned to a talent.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| idpId | uuid | |
+| talentId | uuid | |
+| currentPositionId | uuid | posisi.recru.id reference |
+| targetPositionId | uuid | posisi.recru.id reference |
+| behaviourGaps | map\<behaviourId, float\> | Gap score per Core Behaviour (current – required) |
+| assignedAt | datetime | |

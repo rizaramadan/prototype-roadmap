@@ -1,0 +1,124 @@
+---
+id: RecruitmentFunnel
+name: Recruitment Funnel
+version: 1.0.0
+summary: Full hiring funnel — job posted, candidate applies, assessed, then hired or rejected
+owners:
+  - product
+steps:
+  - id: recruiter_actor
+    title: Recruiter
+    actor:
+      name: Recruiter
+    next_step:
+      id: post_job
+      label: Posts job opening
+
+  - id: post_job
+    title: Post Job
+    message:
+      id: PostJob
+      version: 1.0.0
+    next_step:
+      id: job_posting_service
+      label: Received by JobPostingService
+
+  - id: job_posting_service
+    title: Job Posting Service
+    service:
+      id: JobPostingService
+      version: 1.0.0
+    next_step:
+      id: job_posted
+      label: Publishes
+
+  - id: job_posted
+    title: Job Posted
+    message:
+      id: JobPosted
+      version: 1.0.0
+    next_step:
+      id: candidate_actor
+      label: Candidate discovers opening
+
+  - id: candidate_actor
+    title: Candidate
+    actor:
+      name: Candidate
+    next_step:
+      id: candidate_applied
+      label: Submits application
+
+  - id: candidate_applied
+    title: Candidate Applied
+    message:
+      id: CandidateApplied
+      version: 1.0.0
+    next_step:
+      id: candidate_service
+      label: Received by CandidateService
+
+  - id: candidate_service
+    title: Candidate Service
+    service:
+      id: CandidateService
+      version: 1.0.0
+    next_step:
+      id: advance_stage
+      label: Recruiter advances to assessment
+
+  - id: advance_stage
+    title: Advance Candidate Stage
+    message:
+      id: AdvanceCandidateStage
+      version: 1.0.0
+    next_step:
+      id: assessment_delegation_service
+      label: Received by AssessmentDelegationService
+
+  - id: assessment_delegation_service
+    title: Assessment Delegation Service
+    service:
+      id: AssessmentDelegationService
+      version: 1.0.0
+    next_step:
+      id: assessment_flow
+      label: Delegates to ases.id
+
+  - id: assessment_flow
+    title: Assessment Lifecycle
+    flow:
+      id: AssessmentLifecycle
+      version: 1.0.0
+    next_step:
+      id: hiring_decision_service
+      label: Scores ready — recruiter decides
+
+  - id: hiring_decision_service
+    title: Hiring Decision Service
+    service:
+      id: HiringDecisionService
+      version: 1.0.0
+    next_steps:
+      - id: candidate_hired
+        label: Hire
+      - id: candidate_rejected
+        label: Reject
+
+  - id: candidate_hired
+    title: Candidate Hired
+    message:
+      id: CandidateHired
+      version: 1.0.0
+
+  - id: candidate_rejected
+    title: Candidate Rejected
+    message:
+      id: CandidateRejected
+      version: 1.0.0
+---
+
+End-to-end recruitment flow. The assessment step is a sub-flow referencing `AssessmentLifecycle`.
+`CandidateHired` is the handoff event to `peningkatan.id` — see the Talent Development flow.
+
+<NodeGraph />

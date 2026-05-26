@@ -1,0 +1,45 @@
+---
+id: eventstore.recruitment
+name: eventstore → recruitment
+version: 1.0.0
+summary: Hiring funnel events — job posted, applications, assessments, hire/reject decisions
+owners:
+  - riza
+  - platform
+address: eventstore.recruitment
+protocols:
+  - postgresql
+---
+
+PostgreSQL table `recruitment` in the `eventstore` database. Owned by the `recru.id` domain.
+
+<ChannelInformation />
+
+## Table Schema
+
+```sql
+CREATE TABLE recruitment (
+  id             UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  aggregate_id   UUID        NOT NULL,
+  event_type     VARCHAR     NOT NULL,
+  event_version  VARCHAR     NOT NULL,
+  payload        JSONB       NOT NULL,
+  occurred_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  tenant_id      VARCHAR,
+  trace_id       UUID,
+  correlation_id UUID,
+  causation_id   UUID,
+  INDEX (aggregate_id),
+  INDEX (event_type),
+  INDEX (occurred_at),
+  INDEX (trace_id)
+);
+```
+
+## Event types in this table
+
+- `JobPosted`
+- `CandidateApplied`
+- `AssessmentInvitationSent`
+- `CandidateHired`
+- `CandidateRejected`

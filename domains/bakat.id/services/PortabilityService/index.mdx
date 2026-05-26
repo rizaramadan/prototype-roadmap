@@ -1,0 +1,19 @@
+---
+id: PortabilityService
+name: PortabilityService
+version: 1.0.0
+summary: Retains assessment results from ases.id into the person's portable profile
+owners:
+  - product
+sends:
+  - id: AssessmentResultRetained
+    to:
+      - id: eventstore.persons
+receives:
+  - id: AssessmentCompleted
+    from:
+      - id: eventstore.assessments
+---
+Retains assessment results from ases.id into the person's portable profile.
+
+<NodeGraph />

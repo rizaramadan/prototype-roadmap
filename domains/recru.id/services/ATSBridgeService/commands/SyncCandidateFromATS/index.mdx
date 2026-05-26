@@ -1,0 +1,56 @@
+---
+id: SyncCandidateFromATS
+name: Sync Candidate From ATS
+version: 1.0.0
+summary: Import a candidate from an external ATS into recru.id's CandidateService
+owners:
+  - product
+
+operation:
+  method: POST
+  path: /ats/sync/candidates
+  statusCodes:
+    - "202"
+    - "400"
+---
+Issued by: **ATSBridgeService (internal webhook handler)**
+
+Triggered when an external ATS webhook pushes a new applicant event. ATSBridgeService translates the external payload into the recru.id canonical model and emits a `SyncCandidateFromATS` command to itself, which then creates or updates the candidate via CandidateService.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field         | Type   | Notes                                              |
+|---------------|--------|----------------------------------------------------|
+| atsSource     | enum   | workday \| greenhouse \| lever \| successfactors   |
+| atsId         | string | Candidate ID in the external system                |
+| email         | string | Candidate email (used for deduplication)           |
+| jobRef        | string | External job reference                             |
+| tenantId      | string | Hiring organization                                |
+| rawPayload    | object | Original ATS payload stored verbatim for auditing  |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SyncCandidateFromATS",
+  "type": "object",
+  "required": ["atsSource", "atsId", "email", "jobRef", "tenantId"],
+  "properties": {
+    "atsSource":   { "type": "string", "enum": ["workday", "greenhouse", "lever", "successfactors"] },
+    "atsId":       { "type": "string" },
+    "email":       { "type": "string", "format": "email" },
+    "jobRef":      { "type": "string" },
+    "tenantId":    { "type": "string" },
+    "rawPayload":  { "type": "object" }
+  }
+}
+```
+
+<NodeGraph />

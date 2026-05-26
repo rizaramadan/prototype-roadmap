@@ -1,0 +1,55 @@
+---
+id: PushStatusToATS
+name: Push Status To ATS
+version: 1.0.0
+summary: Write a hire/reject/assessment-completed status back to the originating external ATS
+owners:
+  - product
+
+operation:
+  method: POST
+  path: /ats/push/status
+  statusCodes:
+    - "202"
+    - "404"
+    - "503"
+---
+Issued by: **ATSBridgeService (internal, triggered by CandidateHired / CandidateRejected / AssessmentCompleted events)**
+
+Translates recru.id domain events into the external ATS's API format and pushes the update. Retries on 503. Failures are dead-lettered for manual review.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field     | Type   | Notes                                              |
+|-----------|--------|----------------------------------------------------|
+| atsSource | enum   | workday \| greenhouse \| lever \| successfactors   |
+| atsId     | string | Candidate ID in the external system                |
+| status    | enum   | hired \| rejected \| assessment_completed          |
+| reason    | string? | Rejection reason if status = rejected             |
+| tenantId  | string | Hiring organization                                |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PushStatusToATS",
+  "type": "object",
+  "required": ["atsSource", "atsId", "status", "tenantId"],
+  "properties": {
+    "atsSource": { "type": "string", "enum": ["workday", "greenhouse", "lever", "successfactors"] },
+    "atsId":     { "type": "string" },
+    "status":    { "type": "string", "enum": ["hired", "rejected", "assessment_completed"] },
+    "reason":    { "type": "string" },
+    "tenantId":  { "type": "string" }
+  }
+}
+```
+
+<NodeGraph />

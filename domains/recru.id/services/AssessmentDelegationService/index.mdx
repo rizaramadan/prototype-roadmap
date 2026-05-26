@@ -1,0 +1,24 @@
+---
+id: AssessmentDelegationService
+name: AssessmentDelegationService
+version: 1.0.0
+summary: Coordinates with ases.id for assessment assignment
+owners:
+  - product
+sends:
+  - id: AssessmentDelegated
+    to:
+      - id: eventstore.recruitment
+  - id: AssignAssessment
+receives:
+  - id: DelegateAssessment
+  - id: PersonCoreBehaviourProfileUpdated
+    from:
+      - id: eventstore.assessments
+  - id: AssessmentAssigned
+    from:
+      - id: eventstore.assessments
+---
+Coordinates with ases.id for assessment assignment.
+
+<NodeGraph />

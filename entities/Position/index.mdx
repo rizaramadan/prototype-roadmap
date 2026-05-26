@@ -1,0 +1,84 @@
+---
+id: Position
+name: Position
+version: 1.0.0
+summary: A role definition in the posisi.recru.id ontology — specifies required Core Behaviours
+aggregateRoot: true
+identifier: positionId
+owners:
+  - platform
+badges:
+  - content: Aggregate Root
+    backgroundColor: blue
+    textColor: blue
+  - content: posisi.recru.id
+    backgroundColor: teal
+    textColor: teal
+properties:
+  - name: positionId
+    type: uuid
+    required: true
+    description: Unique identifier
+  - name: title
+    type: string
+    required: true
+    description: Human-readable position name (e.g., "Senior Data Analyst")
+  - name: level
+    type: enum
+    required: true
+    description: "junior | mid | senior | lead | manager | director"
+  - name: coreBehaviourRequirements
+    type: object[]
+    required: true
+    description: "Array of { coreBehaviourId, minScore, weight } — the position profile"
+  - name: competencyIds
+    type: uuid[]
+    required: false
+    description: Competency clusters this position maps to
+    references: Competency
+    relationType: one-to-many
+  - name: externalMappings
+    type: object[]
+    required: false
+    description: "{ source: 'onet'|'skillsfuture', externalCode } — cross-framework refs"
+  - name: createdAt
+    type: datetime
+    required: true
+    description: When the position was defined
+  - name: updatedAt
+    type: datetime
+    required: false
+    description: Last time requirements were changed
+---
+
+## Ontology model
+
+```
+Core Behaviour (atom)
+  → Competency (molecule: named cluster of Core Behaviours)
+    → Position (compound: required Core Behaviour profile + weights)
+```
+
+A Position is expressed directly in Core Behaviours with minimum score thresholds and weights. Competencies are a human-readable grouping layer but the matching algorithm works on raw Core Behaviour scores.
+
+## Invariants
+
+- `coreBehaviourRequirements` must contain at least one entry
+- Each `coreBehaviourId` must reference an existing CoreBehaviour
+- `minScore` must be in [0, 1]
+- `weight` values across all requirements must sum to 1.0
+- Position title is not a unique key — the same title can exist at different levels
+
+## Commands
+
+| Command                    | Guard                                         |
+|----------------------------|-----------------------------------------------|
+| CreatePosition             | None                                          |
+| UpdatePositionRequirements | positionId must exist                         |
+
+## Events emitted
+
+| Event                        | Trigger                    |
+|------------------------------|----------------------------|
+| PositionCreated              | CreatePosition             |
+| PositionRequirementsUpdated  | UpdatePositionRequirements |

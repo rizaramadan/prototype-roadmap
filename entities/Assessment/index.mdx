@@ -1,0 +1,92 @@
+---
+id: Assessment
+name: Assessment
+version: 1.0.0
+summary: The core measurement unit — one person taking one assessment battery in one context
+aggregateRoot: true
+identifier: assessmentId
+owners:
+  - platform
+badges:
+  - content: Aggregate Root
+    backgroundColor: blue
+    textColor: blue
+  - content: ases.id
+    backgroundColor: teal
+    textColor: teal
+properties:
+  - name: assessmentId
+    type: uuid
+    required: true
+    description: Unique identifier
+  - name: personId
+    type: uuid
+    required: true
+    description: bakat.id person taking the assessment
+  - name: tenantId
+    type: string
+    required: true
+    description: Organization that commissioned the assessment
+  - name: positionId
+    type: uuid
+    required: false
+    description: Target position — present when assessment is for recruitment
+    references: Position
+    referencesIdentifier: positionId
+    relationType: one-to-one
+  - name: status
+    type: enum
+    required: true
+    description: "pending | started | completed | expired"
+  - name: assessmentConfigId
+    type: uuid
+    required: true
+    description: Which battery of instruments was used
+  - name: assignedAt
+    type: datetime
+    required: true
+    description: When the assessment was created
+  - name: startedAt
+    type: datetime
+    required: false
+    description: When the person began the assessment
+  - name: completedAt
+    type: datetime
+    required: false
+    description: When all responses were submitted
+  - name: expiresAt
+    type: datetime
+    required: false
+    description: Hard deadline — after this, status → expired
+---
+
+## State Machine
+
+```
+pending → started (person begins first instrument)
+started → completed (all responses submitted via SubmitResponses)
+started → expired (expiresAt passed without completion)
+pending → expired (expiresAt passed before person started)
+```
+
+**Invariants:**
+- `SubmitResponses` is rejected if `status = completed` or `status = expired`
+- `completedAt` is immutable once set
+- `personId` and `tenantId` are immutable after creation
+- A single person may have multiple assessments — each is a distinct aggregate instance
+
+## Commands
+
+| Command           | Guard                                          |
+|-------------------|------------------------------------------------|
+| AssignAssessment  | personId must have active ConsentGranted       |
+| SubmitResponses   | status must be `started`                       |
+
+## Events emitted
+
+| Event                                 | Trigger                              |
+|---------------------------------------|--------------------------------------|
+| AssessmentAssigned                    | Successful AssignAssessment          |
+| AssessmentStarted                     | First SubmitResponses call           |
+| AssessmentCompleted                   | All responses submitted              |
+| PersonCoreBehaviourProfileUpdated     | ScoringService processes completedAt |

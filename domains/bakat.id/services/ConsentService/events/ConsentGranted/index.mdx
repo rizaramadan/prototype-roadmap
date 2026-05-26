@@ -1,0 +1,28 @@
+---
+id: ConsentGranted
+name: ConsentGranted
+version: 1.0.0
+summary: Person has authorized a specific platform to read their retained data
+owners:
+  - product
+---
+Person has authorized a specific platform to read their retained data.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| personId | uuid | |
+| hashedNationalId | string | |
+| grantedTo | string | Platform identifier (e.g., clientB.peningkatan.id) |
+| scope | string[] | e.g., ["core_behaviour_history", "assessment_results"] |
+| grantedAt | datetime | |
+| expiresAt | datetime? | Optional expiry |

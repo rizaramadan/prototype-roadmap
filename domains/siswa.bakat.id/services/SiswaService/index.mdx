@@ -1,0 +1,24 @@
+---
+id: SiswaService
+name: SiswaService
+version: 1.0.0
+summary: Student-specific features on siswa.bakat.id
+owners:
+  - product
+sends:
+  - id: StudentEnrolled
+    to:
+      - id: eventstore.persons
+  - id: StudentProfileUpdated
+    to:
+      - id: eventstore.persons
+receives:
+  - id: EnrollStudent
+  - id: UpdateStudentProfile
+  - id: PersonRegistered
+    from:
+      - id: eventstore.persons
+---
+Student-specific features on siswa.bakat.id.
+
+<NodeGraph />

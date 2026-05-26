@@ -1,0 +1,52 @@
+---
+id: DelegateAssessment
+name: Delegate Assessment
+version: 1.0.0
+summary: Assign a specific assessment configuration to a candidate for a given job
+owners:
+  - product
+
+operation:
+  method: POST
+  path: /delegations
+  statusCodes:
+    - "202"
+    - "409"
+---
+Issued by: **recru.id recruiter (via API Gateway)**
+
+Instructs AssessmentDelegationService to coordinate with IngestionService (via `AssignAssessment`) to create a candidate-specific assessment instance. The delegation is idempotent — re-submitting with the same `candidateId` + `jobId` returns the existing delegation.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field              | Type   | Notes                                          |
+|--------------------|--------|------------------------------------------------|
+| candidateId        | uuid   | Candidate in the recruitment funnel            |
+| jobId              | uuid   | Job the candidate applied for                  |
+| assessmentConfigId | uuid   | Which assessment battery to use                |
+| tenantId           | string | Hiring organization                            |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DelegateAssessment",
+  "type": "object",
+  "required": ["candidateId", "jobId", "assessmentConfigId", "tenantId"],
+  "properties": {
+    "candidateId":        { "type": "string", "format": "uuid" },
+    "jobId":              { "type": "string", "format": "uuid" },
+    "assessmentConfigId": { "type": "string", "format": "uuid" },
+    "tenantId":           { "type": "string" }
+  }
+}
+```
+
+<NodeGraph />

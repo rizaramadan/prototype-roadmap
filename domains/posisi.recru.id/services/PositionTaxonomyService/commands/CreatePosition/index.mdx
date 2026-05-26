@@ -1,0 +1,31 @@
+---
+id: CreatePosition
+name: Create Position
+version: 1.0.0
+summary: Define a new position with its Core Behaviour weight profile
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: /positions
+---
+Issued by: **Talentlytica content team**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| title | string | e.g. "Senior Product Manager" |
+| level | enum | junior \| mid \| senior \| lead \| executive |
+| coreBehaviourWeights | map\<behaviourId, float\> | Weight 0–1 per required Core Behaviour |
+
+<NodeGraph />

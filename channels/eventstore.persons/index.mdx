@@ -1,0 +1,46 @@
+---
+id: eventstore.persons
+name: eventstore → persons
+version: 1.0.0
+summary: Person identity, consent, and portability events from bakat.id
+owners:
+  - riza
+  - platform
+address: eventstore.persons
+protocols:
+  - postgresql
+---
+
+PostgreSQL table `persons` in the `eventstore` database. Owned by the `bakat.id` domain.
+
+<ChannelInformation />
+
+## Table Schema
+
+```sql
+CREATE TABLE persons (
+  id             UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  aggregate_id   UUID        NOT NULL,
+  event_type     VARCHAR     NOT NULL,
+  event_version  VARCHAR     NOT NULL,
+  payload        JSONB       NOT NULL,
+  occurred_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  tenant_id      VARCHAR,
+  trace_id       UUID,
+  correlation_id UUID,
+  causation_id   UUID,
+  INDEX (aggregate_id),
+  INDEX (event_type),
+  INDEX (occurred_at),
+  INDEX (trace_id)
+);
+```
+
+## Event types in this table
+
+- `PersonRegistered`
+- `ProfileUpdated`
+- `ConsentGranted`
+- `ConsentRevoked`
+- `AssessmentResultRetained`
+- `ScholarshipAwarded`

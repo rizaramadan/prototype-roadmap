@@ -1,0 +1,39 @@
+---
+id: PersonCoreBehaviourProfileUpdated
+name: Person Core Behaviour Profile Updated
+version: 1.0.0
+summary: Core Behaviour scores computed — the primary signal event in the ecosystem
+owners:
+  - platform
+badges:
+  - content: Primary Signal
+    backgroundColor: green
+    textColor: green
+---
+Core Behaviour scores computed. **The most important event in the ecosystem** — triggers VisMap refresh, fit score recalculation, IDP gap updates, and succession readiness in peningkatan.id.
+
+## Subscribers
+- bakat.id → updates portable Core Behaviour snapshot
+- recru.id → updates candidate fit score in recruiter dashboard
+- peningkatan.id → primary trigger for VisMap, IDP, succession recalculation
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentId | uuid | |
+| personId | uuid? | |
+| hashedNationalId | string | Cross-domain linking key |
+| coreBehaviourScores | map\<string, float\> | behaviourId → normalized score (0–1) |
+| positionId | uuid? | If assessment was position-scoped |
+| fitScore | float? | Person–position fit (0–1), if positionId set |
+| scoredAt | datetime | |
+| tenantId | string? | Originating client tenant |

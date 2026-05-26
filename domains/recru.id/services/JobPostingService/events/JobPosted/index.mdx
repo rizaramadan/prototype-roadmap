@@ -1,0 +1,28 @@
+---
+id: JobPosted
+name: JobPosted
+version: 1.0.0
+summary: A new job opening has been published on the tenant's portal
+owners:
+  - product
+---
+A new job opening has been published on the tenant's portal.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| jobId | uuid | |
+| tenantId | string | |
+| positionId | uuid | posisi.recru.id reference — determines Core Behaviour requirements |
+| title | string | Display title |
+| postedAt | datetime | |
+| closesAt | datetime? | |

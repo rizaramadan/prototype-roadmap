@@ -1,0 +1,32 @@
+---
+id: RecordHiringDecision
+name: Record Hiring Decision
+version: 1.0.0
+summary: Record the final hire or reject decision for an application
+owners:
+  - platform
+
+operation:
+  method: POST
+  path: "/applications/{applicationId}/decision"
+---
+Issued by: **Recruiter**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| applicationId | uuid | |
+| decision | enum | hire \| reject |
+| startDate | date? | If hired |
+| rejectionReason | string? | If rejected |
+
+<NodeGraph />

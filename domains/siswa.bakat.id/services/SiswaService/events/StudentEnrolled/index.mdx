@@ -1,0 +1,43 @@
+---
+id: StudentEnrolled
+name: StudentEnrolled
+version: 1.0.0
+summary: A bakat.id person has been enrolled as a student at an educational institution
+owners:
+  - product
+---
+Emitted when a student enrolment is successfully recorded. The beasiswa.bakat.id domain consumes this to evaluate scholarship eligibility.
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Schema
+
+| Field         | Type     | Notes                                        |
+|---------------|----------|----------------------------------------------|
+| studentId     | string   | Institution-assigned student ID              |
+| personId      | uuid     | bakat.id person identifier                   |
+| institutionId | uuid     | Enrolling institution                        |
+| programId     | uuid     | Degree or certificate program                |
+| enrolledAt    | datetime | ISO 8601                                     |
+
+```json title="schema.json"
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StudentEnrolled",
+  "type": "object",
+  "required": ["studentId", "personId", "institutionId", "programId", "enrolledAt"],
+  "properties": {
+    "studentId":     { "type": "string" },
+    "personId":      { "type": "string", "format": "uuid" },
+    "institutionId": { "type": "string", "format": "uuid" },
+    "programId":     { "type": "string", "format": "uuid" },
+    "enrolledAt":    { "type": "string", "format": "date-time" }
+  }
+}
+```

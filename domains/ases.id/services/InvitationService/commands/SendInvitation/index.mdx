@@ -1,0 +1,27 @@
+---
+id: SendInvitation
+name: Send Invitation
+version: 1.0.0
+summary: Sends the assessment invitation email to the invitee
+owners:
+  - platform
+---
+Issued by: **InvitationService (internal)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| assessmentId | uuid | |
+| email | string | |
+| locale | string? | Language for the email |
+
+<NodeGraph />

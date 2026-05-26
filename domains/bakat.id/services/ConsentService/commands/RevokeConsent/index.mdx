@@ -1,0 +1,30 @@
+---
+id: RevokeConsent
+name: Revoke Consent
+version: 1.0.0
+summary: Revoke a previously granted consent from a named platform
+owners:
+  - platform
+
+operation:
+  method: DELETE
+  path: "/persons/{personId}/consents/{platformId}"
+---
+Issued by: **person (self)**
+
+## Envelope
+
+| Field         | Type   | Notes                                                    |
+|---------------|--------|----------------------------------------------------------|
+| traceId       | uuid   | Propagated from originating request                      |
+| correlationId | uuid   | Groups related events across services and workflows      |
+| causationId   | uuid?  | ID of the event or command that directly caused this one |
+
+## Payload
+
+| Field | Type | Notes |
+|-------|------|-------|
+| personId | uuid | |
+| revokedFrom | string | Platform identifier |
+
+<NodeGraph />
