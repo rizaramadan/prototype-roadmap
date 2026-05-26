@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UpdateProfile",
+  "type": "object",
+  "required": ["personId", "fields"],
+  "properties": {
+    "personId": { "type": "string", "format": "uuid" },
+    "fields":   { "type": "object" }
+  }
+}

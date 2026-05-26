@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssessmentAssigned",
+  "type": "object",
+  "required": ["assessmentId", "assignedBy", "assignedAt"],
+  "properties": {
+    "assessmentId":      { "type": "string", "format": "uuid" },
+    "personId":          { "type": "string", "format": "uuid" },
+    "hashedNationalId":  { "type": "string" },
+    "assignedBy":        { "type": "string" },
+    "positionId":        { "type": "string", "format": "uuid" },
+    "assignedAt":        { "type": "string", "format": "date-time" }
+  }
+}

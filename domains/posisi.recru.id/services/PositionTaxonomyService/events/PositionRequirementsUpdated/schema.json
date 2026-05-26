@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PositionRequirementsUpdated",
+  "type": "object",
+  "required": ["positionId", "previousWeights", "newWeights", "updatedAt"],
+  "properties": {
+    "positionId":      { "type": "string", "format": "uuid" },
+    "previousWeights": { "type": "object", "additionalProperties": { "type": "number" } },
+    "newWeights":      { "type": "object", "additionalProperties": { "type": "number" } },
+    "reason":          { "type": "string" },
+    "updatedAt":       { "type": "string", "format": "date-time" }
+  }
+}

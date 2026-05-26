@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PositionCreated",
+  "type": "object",
+  "required": ["positionId", "title", "level", "coreBehaviourWeights"],
+  "properties": {
+    "positionId":            { "type": "string", "format": "uuid" },
+    "title":                 { "type": "string" },
+    "level":                 { "type": "string", "enum": ["junior", "mid", "senior", "lead", "executive"] },
+    "coreBehaviourWeights":  { "type": "object", "additionalProperties": { "type": "number" } },
+    "externalMappings":      { "type": "object" }
+  }
+}

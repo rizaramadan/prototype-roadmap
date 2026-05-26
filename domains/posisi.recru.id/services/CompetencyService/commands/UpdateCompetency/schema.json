@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UpdateCompetency",
+  "type": "object",
+  "required": ["competencyId"],
+  "properties": {
+    "competencyId":           { "type": "string", "format": "uuid" },
+    "name":                   { "type": "string" },
+    "addCoreBehaviourIds":    { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "removeCoreBehaviourIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "description":            { "type": "string" }
+  }
+}

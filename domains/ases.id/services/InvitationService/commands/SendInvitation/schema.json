@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SendInvitation",
+  "type": "object",
+  "required": ["assessmentId", "email"],
+  "properties": {
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "email":        { "type": "string", "format": "email" },
+    "locale":       { "type": "string" }
+  }
+}

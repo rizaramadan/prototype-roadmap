@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VisMapGenerated",
+  "type": "object",
+  "required": ["visMapId", "personId", "positionId", "tenantId", "overallGapScore", "gaps", "generatedAt"],
+  "properties": {
+    "visMapId":        { "type": "string", "format": "uuid" },
+    "personId":        { "type": "string", "format": "uuid" },
+    "positionId":      { "type": "string", "format": "uuid" },
+    "tenantId":        { "type": "string" },
+    "overallGapScore": { "type": "number", "minimum": 0, "maximum": 1 },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["coreBehaviourId", "required", "actual", "delta"],
+        "properties": {
+          "coreBehaviourId": { "type": "string", "format": "uuid" },
+          "required":        { "type": "number" },
+          "actual":          { "type": "number" },
+          "delta":           { "type": "number" }
+        }
+      }
+    },
+    "generatedAt": { "type": "string", "format": "date-time" }
+  }
+}

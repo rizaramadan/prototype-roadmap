@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IDPAssigned",
+  "type": "object",
+  "required": ["idpId", "talentId", "currentPositionId", "targetPositionId", "behaviourGaps", "assignedAt"],
+  "properties": {
+    "idpId":             { "type": "string", "format": "uuid" },
+    "talentId":          { "type": "string", "format": "uuid" },
+    "currentPositionId": { "type": "string", "format": "uuid" },
+    "targetPositionId":  { "type": "string", "format": "uuid" },
+    "behaviourGaps":     { "type": "object", "additionalProperties": { "type": "number" } },
+    "assignedAt":        { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssessmentResultRetained",
+  "type": "object",
+  "required": ["personId", "assessmentId", "retainedData", "sourceTenant", "retainedAt"],
+  "properties": {
+    "personId":     { "type": "string", "format": "uuid" },
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "retainedData": { "type": "object" },
+    "sourceTenant": { "type": "string" },
+    "retainedAt":   { "type": "string", "format": "date-time" }
+  }
+}

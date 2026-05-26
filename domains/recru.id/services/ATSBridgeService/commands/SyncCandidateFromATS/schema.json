@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SyncCandidateFromATS",
+  "type": "object",
+  "required": ["atsSource", "atsId", "email", "jobRef", "tenantId"],
+  "properties": {
+    "atsSource":   { "type": "string", "enum": ["workday", "greenhouse", "lever", "successfactors"] },
+    "atsId":       { "type": "string" },
+    "email":       { "type": "string", "format": "email" },
+    "jobRef":      { "type": "string" },
+    "tenantId":    { "type": "string" },
+    "rawPayload":  { "type": "object" }
+  }
+}

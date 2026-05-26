@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MapExternalTaxonomy",
+  "type": "object",
+  "required": ["positionId", "source", "externalCode"],
+  "properties": {
+    "positionId":   { "type": "string", "format": "uuid" },
+    "source":       { "type": "string", "enum": ["onet", "skillsfuture"] },
+    "externalCode": { "type": "string" }
+  }
+}

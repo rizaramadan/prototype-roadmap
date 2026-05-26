@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssessmentStarted",
+  "type": "object",
+  "required": ["assessmentId", "startedAt"],
+  "properties": {
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "personId":     { "type": "string", "format": "uuid" },
+    "startedAt":    { "type": "string", "format": "date-time" }
+  }
+}

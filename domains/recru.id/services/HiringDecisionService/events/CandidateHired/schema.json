@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CandidateHired",
+  "type": "object",
+  "required": ["applicationId", "candidateId", "hashedNationalId", "jobId", "positionId", "tenantId", "hiredAt"],
+  "properties": {
+    "applicationId":    { "type": "string", "format": "uuid" },
+    "candidateId":      { "type": "string", "format": "uuid" },
+    "hashedNationalId": { "type": "string" },
+    "jobId":            { "type": "string", "format": "uuid" },
+    "positionId":       { "type": "string", "format": "uuid" },
+    "tenantId":         { "type": "string" },
+    "hiredAt":          { "type": "string", "format": "date-time" },
+    "startDate":        { "type": "string", "format": "date" }
+  }
+}

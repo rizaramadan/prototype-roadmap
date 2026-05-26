@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AwardIssued",
+  "type": "object",
+  "required": ["awardId", "personId", "awardType", "tenantId", "issuedAt"],
+  "properties": {
+    "awardId":            { "type": "string", "format": "uuid" },
+    "personId":           { "type": "string", "format": "uuid" },
+    "awardType":          { "type": "string", "enum": ["top_performer", "learning_agility", "consistency"] },
+    "sourceAssessmentId": { "type": "string", "format": "uuid" },
+    "tenantId":           { "type": "string" },
+    "issuedAt":           { "type": "string", "format": "date-time" }
+  }
+}

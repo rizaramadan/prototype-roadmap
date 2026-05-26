@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RegisterPerson",
+  "type": "object",
+  "required": ["hashedNationalId", "email", "source"],
+  "properties": {
+    "hashedNationalId": { "type": "string" },
+    "email":            { "type": "string", "format": "email" },
+    "source":           { "type": "string", "enum": ["www", "siswa", "beasiswa", "recru_intake", "ases_intake"] }
+  }
+}

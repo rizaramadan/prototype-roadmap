@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssessmentCompleted",
+  "type": "object",
+  "required": ["assessmentId", "completedAt", "duration"],
+  "properties": {
+    "assessmentId":      { "type": "string", "format": "uuid" },
+    "personId":          { "type": "string", "format": "uuid" },
+    "hashedNationalId":  { "type": "string" },
+    "completedAt":       { "type": "string", "format": "date-time" },
+    "duration":          { "type": "integer", "description": "seconds" }
+  }
+}

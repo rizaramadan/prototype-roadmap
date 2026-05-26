@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GenerateVisMap",
+  "type": "object",
+  "required": ["personId", "positionId", "tenantId"],
+  "properties": {
+    "personId":   { "type": "string", "format": "uuid" },
+    "positionId": { "type": "string", "format": "uuid" },
+    "tenantId":   { "type": "string" }
+  }
+}

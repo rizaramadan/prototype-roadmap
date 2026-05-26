@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RevokeConsent",
+  "type": "object",
+  "required": ["personId", "revokedFrom"],
+  "properties": {
+    "personId":    { "type": "string", "format": "uuid" },
+    "revokedFrom": { "type": "string" }
+  }
+}

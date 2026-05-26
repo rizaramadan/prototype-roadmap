@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JobPosted",
+  "type": "object",
+  "required": ["jobId", "tenantId", "positionId", "title", "postedAt"],
+  "properties": {
+    "jobId":      { "type": "string", "format": "uuid" },
+    "tenantId":   { "type": "string" },
+    "positionId": { "type": "string", "format": "uuid" },
+    "title":      { "type": "string" },
+    "postedAt":   { "type": "string", "format": "date-time" },
+    "closesAt":   { "type": "string", "format": "date-time" }
+  }
+}

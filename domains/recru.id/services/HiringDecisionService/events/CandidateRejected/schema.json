@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CandidateRejected",
+  "type": "object",
+  "required": ["applicationId", "candidateId", "rejectedAt", "stage"],
+  "properties": {
+    "applicationId": { "type": "string", "format": "uuid" },
+    "candidateId":   { "type": "string", "format": "uuid" },
+    "rejectedAt":    { "type": "string", "format": "date-time" },
+    "stage":         { "type": "string" }
+  }
+}

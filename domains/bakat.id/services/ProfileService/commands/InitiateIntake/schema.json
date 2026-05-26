@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "InitiateIntake",
+  "type": "object",
+  "required": ["email", "sourcePlatform"],
+  "properties": {
+    "hashedNationalId": { "type": "string" },
+    "email":            { "type": "string", "format": "email" },
+    "sourcePlatform":   { "type": "string" }
+  }
+}

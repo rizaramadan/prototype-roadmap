@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CareerPathDefined",
+  "type": "object",
+  "required": ["pathId", "talentId", "milestones", "definedAt"],
+  "properties": {
+    "pathId":     { "type": "string", "format": "uuid" },
+    "talentId":   { "type": "string", "format": "uuid" },
+    "milestones": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "definedAt":  { "type": "string", "format": "date-time" }
+  }
+}

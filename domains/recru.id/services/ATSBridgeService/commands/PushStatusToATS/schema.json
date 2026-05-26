@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PushStatusToATS",
+  "type": "object",
+  "required": ["atsSource", "atsId", "status", "tenantId"],
+  "properties": {
+    "atsSource": { "type": "string", "enum": ["workday", "greenhouse", "lever", "successfactors"] },
+    "atsId":     { "type": "string" },
+    "status":    { "type": "string", "enum": ["hired", "rejected", "assessment_completed"] },
+    "reason":    { "type": "string" },
+    "tenantId":  { "type": "string" }
+  }
+}

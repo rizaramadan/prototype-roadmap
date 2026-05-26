@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CandidateApplied",
+  "type": "object",
+  "required": ["applicationId", "jobId", "candidateId", "tenantId", "source", "appliedAt"],
+  "properties": {
+    "applicationId":    { "type": "string", "format": "uuid" },
+    "jobId":            { "type": "string", "format": "uuid" },
+    "candidateId":      { "type": "string", "format": "uuid" },
+    "hashedNationalId": { "type": "string" },
+    "tenantId":         { "type": "string" },
+    "source":           { "type": "string", "enum": ["direct", "external_ats", "bakat_portal"] },
+    "appliedAt":        { "type": "string", "format": "date-time" }
+  }
+}

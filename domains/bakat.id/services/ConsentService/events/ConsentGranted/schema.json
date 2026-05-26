@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConsentGranted",
+  "type": "object",
+  "required": ["personId", "hashedNationalId", "grantedTo", "scope", "grantedAt"],
+  "properties": {
+    "personId":         { "type": "string", "format": "uuid" },
+    "hashedNationalId": { "type": "string" },
+    "grantedTo":        { "type": "string" },
+    "scope":            { "type": "array", "items": { "type": "string" } },
+    "grantedAt":        { "type": "string", "format": "date-time" },
+    "expiresAt":        { "type": "string", "format": "date-time" }
+  }
+}

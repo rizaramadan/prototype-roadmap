@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RecordHiringDecision",
+  "type": "object",
+  "required": ["applicationId", "decision"],
+  "properties": {
+    "applicationId":   { "type": "string", "format": "uuid" },
+    "decision":        { "type": "string", "enum": ["hire", "reject"] },
+    "startDate":       { "type": "string", "format": "date" },
+    "rejectionReason": { "type": "string" }
+  }
+}

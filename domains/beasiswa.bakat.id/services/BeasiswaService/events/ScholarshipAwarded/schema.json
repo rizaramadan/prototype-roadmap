@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ScholarshipAwarded",
+  "type": "object",
+  "required": ["personId", "scholarshipId", "awardedBy", "awardedAt"],
+  "properties": {
+    "personId":      { "type": "string", "format": "uuid" },
+    "scholarshipId": { "type": "string", "format": "uuid" },
+    "awardedBy":     { "type": "string" },
+    "awardedAt":     { "type": "string", "format": "date-time" }
+  }
+}

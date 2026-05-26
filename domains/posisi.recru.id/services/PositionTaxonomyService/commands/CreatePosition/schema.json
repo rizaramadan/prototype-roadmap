@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CreatePosition",
+  "type": "object",
+  "required": ["title", "level", "coreBehaviourWeights"],
+  "properties": {
+    "title":                 { "type": "string" },
+    "level":                 { "type": "string", "enum": ["junior", "mid", "senior", "lead", "executive"] },
+    "coreBehaviourWeights":  { "type": "object", "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 } }
+  }
+}

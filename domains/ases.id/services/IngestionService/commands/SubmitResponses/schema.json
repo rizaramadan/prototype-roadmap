@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SubmitResponses",
+  "type": "object",
+  "required": ["assessmentId", "responses", "submittedAt"],
+  "properties": {
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "responses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["questionId", "answer"],
+        "properties": {
+          "questionId": { "type": "string" },
+          "answer":     {}
+        }
+      }
+    },
+    "submittedAt": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UpdateStudentProfile",
+  "type": "object",
+  "required": ["studentId"],
+  "properties": {
+    "studentId":      { "type": "string" },
+    "gpa":            { "type": "number", "minimum": 0, "maximum": 4 },
+    "programStatus":  { "type": "string", "enum": ["active", "graduated", "withdrawn", "on_leave"] },
+    "graduationDate": { "type": "string", "format": "date" }
+  }
+}

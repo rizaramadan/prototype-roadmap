@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReassessWithPreviousData",
+  "type": "object",
+  "required": ["assessmentId", "previousAssessmentId"],
+  "properties": {
+    "assessmentId":         { "type": "string", "format": "uuid" },
+    "previousAssessmentId": { "type": "string", "format": "uuid" }
+  }
+}

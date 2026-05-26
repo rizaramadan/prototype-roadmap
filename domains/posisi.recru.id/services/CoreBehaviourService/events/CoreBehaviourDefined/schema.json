@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CoreBehaviourDefined",
+  "type": "object",
+  "required": ["behaviourId", "code", "name", "description", "category", "definedAt"],
+  "properties": {
+    "behaviourId": { "type": "string", "format": "uuid" },
+    "code":        { "type": "string" },
+    "name":        { "type": "string" },
+    "description": { "type": "string" },
+    "category":    { "type": "string" },
+    "definedAt":   { "type": "string", "format": "date-time" }
+  }
+}

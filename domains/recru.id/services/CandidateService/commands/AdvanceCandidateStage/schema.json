@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AdvanceCandidateStage",
+  "type": "object",
+  "required": ["applicationId", "toStage"],
+  "properties": {
+    "applicationId": { "type": "string", "format": "uuid" },
+    "toStage":       { "type": "string", "enum": ["screening", "assessment", "interview", "offer", "hired", "rejected"] },
+    "note":          { "type": "string" }
+  }
+}

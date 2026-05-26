@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UpdatePositionRequirements",
+  "type": "object",
+  "required": ["positionId", "coreBehaviourWeights"],
+  "properties": {
+    "positionId":            { "type": "string", "format": "uuid" },
+    "coreBehaviourWeights":  { "type": "object", "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 } },
+    "reason":                { "type": "string" }
+  }
+}

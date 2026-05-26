@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SuccessionCandidateNominated",
+  "type": "object",
+  "required": ["nominationId", "talentId", "targetPositionId", "readinessScore", "readinessLevel", "nominatedAt"],
+  "properties": {
+    "nominationId":     { "type": "string", "format": "uuid" },
+    "talentId":         { "type": "string", "format": "uuid" },
+    "targetPositionId": { "type": "string", "format": "uuid" },
+    "readinessScore":   { "type": "number", "minimum": 0, "maximum": 1 },
+    "readinessLevel":   { "type": "string", "enum": ["ready_now", "ready_1_year", "ready_3_years"] },
+    "nominatedAt":      { "type": "string", "format": "date-time" }
+  }
+}

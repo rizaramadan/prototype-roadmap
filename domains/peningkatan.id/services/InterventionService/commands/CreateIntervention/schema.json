@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CreateIntervention",
+  "type": "object",
+  "required": ["talentId", "tenantId", "targetBehaviours", "actionType", "description"],
+  "properties": {
+    "talentId":                { "type": "string", "format": "uuid" },
+    "tenantId":                { "type": "string" },
+    "targetBehaviours":        { "type": "array", "items": { "type": "string", "format": "uuid" } },
+    "actionType":              { "type": "string", "enum": ["coaching", "training", "mentoring", "reassignment", "other"] },
+    "description":             { "type": "string" },
+    "plannedReassessmentAt":   { "type": "string", "format": "date-time" }
+  }
+}

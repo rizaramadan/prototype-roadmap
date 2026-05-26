@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssignIDP",
+  "type": "object",
+  "required": ["talentId", "currentPositionId", "targetPositionId"],
+  "properties": {
+    "talentId":          { "type": "string", "format": "uuid" },
+    "currentPositionId": { "type": "string", "format": "uuid" },
+    "targetPositionId":  { "type": "string", "format": "uuid" }
+  }
+}

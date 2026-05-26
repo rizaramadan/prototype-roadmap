@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AssessmentDelegated",
+  "type": "object",
+  "required": ["delegationId", "candidateId", "jobId", "assessmentId", "tenantId", "delegatedAt"],
+  "properties": {
+    "delegationId": { "type": "string", "format": "uuid" },
+    "candidateId":  { "type": "string", "format": "uuid" },
+    "jobId":        { "type": "string", "format": "uuid" },
+    "assessmentId": { "type": "string", "format": "uuid" },
+    "tenantId":     { "type": "string" },
+    "delegatedAt":  { "type": "string", "format": "date-time" }
+  }
+}

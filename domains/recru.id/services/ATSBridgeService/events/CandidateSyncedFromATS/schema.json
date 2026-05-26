@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CandidateSyncedFromATS",
+  "type": "object",
+  "required": ["candidateId", "atsSource", "atsId", "tenantId", "syncedAt"],
+  "properties": {
+    "candidateId": { "type": "string", "format": "uuid" },
+    "atsSource":   { "type": "string", "enum": ["workday", "greenhouse", "lever", "successfactors"] },
+    "atsId":       { "type": "string" },
+    "tenantId":    { "type": "string" },
+    "syncedAt":    { "type": "string", "format": "date-time" }
+  }
+}
